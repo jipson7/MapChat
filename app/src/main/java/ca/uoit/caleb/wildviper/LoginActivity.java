@@ -1,6 +1,7 @@
 package ca.uoit.caleb.wildviper;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +16,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 
 public class LoginActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
@@ -32,6 +35,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
          */
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+                .requestProfile()
                 .build();
 
         /**
@@ -50,8 +54,32 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
     }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    protected void onStart() {
+        super.onStart();
+        /**
+         * Check to see if user has already signed in.
+         */
+        OptionalPendingResult<GoogleSignInResult> pendingResult =
+                Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+        if (pendingResult.isDone()) {
+            // Credentials are available from previous signin
+            handleSignInResult(pendingResult.get());
+        } else {
+            // No immediate credentials available, fetch them asynchronously
+            //TODO - showProgressIndicator();
+            pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(@NonNull GoogleSignInResult result) {
+                    handleSignInResult(result);
+                    //TODO - hideProgressIndicator();
+                }
+            });
+        }
+    }
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        //TODO
     }
 
     @Override
@@ -80,11 +108,22 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
-            Log.i("SIGNIN RESULT", "User: " + acct.getEmail());
-        } else {
-            Log.i("SIGNIN RESULT", "Sign in Failed");
+            String resultMessage = acct.getDisplayName() + " signed in successfully.";
+            saveUserData(acct);
+            Toast.makeText(getApplicationContext(), resultMessage, Toast.LENGTH_LONG).show();
+            startMainActivity();
         }
     }
 
+    /**
+     * Save data from Google sign in to shared preferences
+     * @param acct The Google Account object
+     */
+    private void saveUserData(GoogleSignInAccount acct) {
+        Context context = getApplicationContext();
+        UserData.saveData(acct, context);
+    }
 
+    private void startMainActivity() {
+    }
 }
