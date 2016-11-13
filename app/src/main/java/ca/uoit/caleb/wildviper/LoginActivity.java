@@ -97,7 +97,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        //TODO
+        //TODO implement
     }
 
     @Override
