@@ -144,7 +144,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
     }
 
     private void startMainActivity() {
-        Intent i = new Intent(this, MapActivity.class);
+        Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
     }
