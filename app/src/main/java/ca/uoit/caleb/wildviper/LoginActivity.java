@@ -1,12 +1,10 @@
 package ca.uoit.caleb.wildviper;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -32,6 +30,8 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        setupSigninButton();
+
         /**
          * Request basic profile info and email
          */
@@ -49,7 +49,6 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        setupSigninButton();
     }
 
     /**
@@ -145,7 +144,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
     }
 
     private void startMainActivity() {
-        Intent i = new Intent(this, MainActivity.class);
+        Intent i = new Intent(this, MapActivity.class);
         startActivity(i);
         finish();
     }

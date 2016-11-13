@@ -1,8 +1,10 @@
 <resources>
+    <string name="app_name">Wild Viper</string>
+
     <!-- Login -->
     <string name="title_activity_login">Login</string>
 
     <!-- Main -->
-    <string name="title_activity_main">Map</string>
+
 
 </resources>
