@@ -6,12 +6,12 @@ import android.app.Fragment;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v13.app.FragmentCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -21,11 +21,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
-    //TODO Delete this var and logs
-    private static final String PERMS = "PERMISSIONS";
-
     private static final int RC_PERMISSION_REQUEST = 1231;
 
+    private GoogleApiClient mGoogleApiClient;
     private GoogleMap mMap;
     private MapView mMapView;
     private Activity mActivity;
@@ -79,14 +77,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         turnOnMyLocationButton();
-
-        // Add a marker in Sydney and move the camera
-        LatLng userLocation = getUserLocation();
-        String markerString = "You are here!";
-        mMap.addMarker(new MarkerOptions().position(userLocation).title(markerString));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
     }
 
     private void moveToLocation(LatLng location, String marker) {
@@ -97,7 +88,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private void turnOnMyLocationButton() {
         if (mActivity.checkCallingOrSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
-            moveToLocation(mDefaultLocation, "You are here!");
+            moveToLocation(getUserLocation(), "You are here!");
         } else {
             requestLocationPermissions();
         }
