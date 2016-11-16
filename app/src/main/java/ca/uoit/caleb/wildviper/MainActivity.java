@@ -1,6 +1,8 @@
 package ca.uoit.caleb.wildviper;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -68,8 +70,25 @@ public class MainActivity extends FragmentActivity{
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        // Handle your other action bar items...
-
         return super.onOptionsItemSelected(item);
+    }
+
+    private static final int RC_THEME_SELECT = 2123;
+    public void selectMapTheme(View view) {
+        Intent i = new Intent(this, MapThemeSelectActivity.class);
+        startActivityForResult(i, RC_THEME_SELECT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_THEME_SELECT && resultCode == Activity.RESULT_OK) {
+            String theme = data.getStringExtra("mapStyle");
+
+            MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.main_map_fragment);
+            MapData.setMapStyle(theme, this);
+            mapFragment.changeMapStyle(MapData.getMapStyle(this));
+            mDrawerLayout.closeDrawers();
+        }
     }
 }

@@ -136,7 +136,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         }
     }
 
-    private void changeMapStyle(int mapStyle) {
+    public void changeMapStyle(int mapStyle) {
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(mActivity, mapStyle));
     }
 
