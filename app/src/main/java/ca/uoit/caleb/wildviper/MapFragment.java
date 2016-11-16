@@ -20,6 +20,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks {
@@ -27,13 +28,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     private static final int RC_PERMISSION_REQUEST = 1231;
 
     private GoogleApiClient mGoogleApiClient;
+    private Float mZoomLevel = 15.0f;
     private GoogleMap mMap;
     private MapView mMapView;
     private Activity mActivity;
     private LatLng mDefaultLocation;
-    private String mDefaultMarkerMessage = "Default Location";
     private LatLng mUserLocation;
-    private String mUserMarkerMessage = "You are here!";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,9 +56,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         }
 
         /**
-         * Set Default Location to Sydney
+         * Set Default Location to Toronto
          */
-        mDefaultLocation= new LatLng(-34, 151);
+        mDefaultLocation = new LatLng(43.652, -79.3832);
 
         /**
          * Attach map to XML
@@ -75,7 +75,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
             if (location != null) {
                 mUserLocation = new LatLng(location.getLatitude(), location.getLongitude());
                 if (mMap != null) {
-                    moveToLocation(mUserLocation, mUserMarkerMessage);
+                    moveToLocation(mUserLocation);
                 }
             }
         } else {
@@ -83,9 +83,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         }
     }
 
-    private void moveToLocation(LatLng location, String marker) {
-        mMap.addMarker(new MarkerOptions().position(location).title(marker));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+    private void moveToLocation(LatLng location) {
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions().position(location).title(UserData.getFullName()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, mZoomLevel));
     }
 
 
@@ -110,7 +111,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
                     setCurrentLocation();
                 } else {
                     Toast.makeText(mActivity, "Moving to default location.", Toast.LENGTH_LONG).show();
-                    moveToLocation(mDefaultLocation, mDefaultMarkerMessage);
+                    moveToLocation(mDefaultLocation);
                 }
                 return;
             }
@@ -125,12 +126,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+        changeMapStyle(R.raw.map_style_night);
+
         if (mUserLocation == null) {
-            moveToLocation(mDefaultLocation, mDefaultMarkerMessage);
+            moveToLocation(mDefaultLocation);
         } else {
-            moveToLocation(mUserLocation, mUserMarkerMessage);
+            moveToLocation(mUserLocation);
         }
     }
+
+    private void changeMapStyle(int mapStyle) {
+        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(mActivity, mapStyle));
+    }
+
 
     /**
      * Google Api Connected Success
