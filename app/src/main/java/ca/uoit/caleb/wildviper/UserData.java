@@ -16,7 +16,7 @@ public class UserData {
     private static final String USER_PREFERENCES = "USER_PREFERENCES";
 
     //Context
-    private static Context CONTEXT = null;
+    private static Context CONTEXT;
 
     /**
      * Keys used to store and retrieve user data

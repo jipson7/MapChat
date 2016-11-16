@@ -127,7 +127,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        changeMapStyle(R.raw.map_style_night);
+        changeMapStyle(MapData.getMapStyle(mActivity));
 
         if (mUserLocation == null) {
             moveToLocation(mDefaultLocation);
