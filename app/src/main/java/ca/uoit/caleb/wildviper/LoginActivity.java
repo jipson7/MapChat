@@ -1,34 +1,33 @@
 package ca.uoit.caleb.wildviper;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ui.ResultCodes;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 
 
-public class LoginActivity extends FragmentActivity {
+public class LoginActivity extends Activity {
 
     private static final int RC_SIGN_IN = 1234;
 
-    FirebaseUser mUser;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
-        mUser = auth.getCurrentUser();
 
-        if (auth.getCurrentUser() != null) {
+        if (mAuth.getCurrentUser() != null) {
             launchMainActivity();
         }
     }
@@ -46,19 +45,23 @@ public class LoginActivity extends FragmentActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case RESULT_OK: {
-                launchMainActivity();
+                String username = mAuth.getCurrentUser().getDisplayName();
+                String message = username + " signed in Successfully";
+                showSnackbar(message);
+                //launchMainActivity();
+
                 break;
             }
             case RESULT_CANCELED: {
-                //showSnackbar(R.string.sign_in_cancelled);
+                showSnackbar(getString(R.string.snackbar_sign_in_cancelled));
                 break;
             }
             case ResultCodes.RESULT_NO_NETWORK: {
-                //showSnackbar(R.string.no_internet_connection);
+                showSnackbar(getString(R.string.snackbar_no_internet));
                 break;
             }
             default: {
-                //showSnackbar(R.string.unexpected_error);
+                showSnackbar(getString(R.string.snackbar_unexpected_error));
                 break;
             }
         }
@@ -68,5 +71,10 @@ public class LoginActivity extends FragmentActivity {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
+    }
+
+    private void showSnackbar(String message) {
+        View view = findViewById(R.id.sign_in_button);
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
 }
