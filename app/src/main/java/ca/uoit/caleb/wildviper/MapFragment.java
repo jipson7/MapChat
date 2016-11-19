@@ -22,10 +22,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks {
 
     private static final int RC_PERMISSION_REQUEST = 1231;
+
+    FirebaseUser mUser;
 
     private GoogleApiClient mGoogleApiClient;
     private Float mZoomLevel = 15.0f;
@@ -39,6 +44,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_map, container, false);
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        mUser = auth.getCurrentUser();
 
         /**
          * Get Parent Activity
@@ -85,7 +93,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
 
     private void moveToLocation(LatLng location) {
         mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(location).title(UserData.getFullName()));
+        mMap.addMarker(new MarkerOptions().position(location).title(mUser.getDisplayName()));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, mZoomLevel));
     }
 

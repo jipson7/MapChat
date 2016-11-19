@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ui.ResultCodes;
@@ -47,21 +48,21 @@ public class LoginActivity extends Activity {
             case RESULT_OK: {
                 String username = mAuth.getCurrentUser().getDisplayName();
                 String message = username + " signed in Successfully";
-                showSnackbar(message);
-                //launchMainActivity();
+                showToast(message);
+                launchMainActivity();
 
                 break;
             }
             case RESULT_CANCELED: {
-                showSnackbar(getString(R.string.snackbar_sign_in_cancelled));
+                showToast(getString(R.string.snackbar_sign_in_cancelled));
                 break;
             }
             case ResultCodes.RESULT_NO_NETWORK: {
-                showSnackbar(getString(R.string.snackbar_no_internet));
+                showToast(getString(R.string.snackbar_no_internet));
                 break;
             }
             default: {
-                showSnackbar(getString(R.string.snackbar_unexpected_error));
+                showToast(getString(R.string.snackbar_unexpected_error));
                 break;
             }
         }
@@ -73,8 +74,7 @@ public class LoginActivity extends Activity {
         finish();
     }
 
-    private void showSnackbar(String message) {
-        View view = findViewById(R.id.sign_in_button);
-        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }
