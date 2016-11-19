@@ -1,19 +1,21 @@
 {
   "project_info": {
-    "project_number": "669283929214",
-    "project_id": "wildviper-1478798996255"
+    "project_number": "429083982643",
+    "firebase_url": "https://wildviper-be73b.firebaseio.com",
+    "project_id": "wildviper-be73b",
+    "storage_bucket": "wildviper-be73b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:669283929214:android:6e7b8dfe45014c54",
+        "mobilesdk_app_id": "1:429083982643:android:6e7b8dfe45014c54",
         "android_client_info": {
           "package_name": "ca.uoit.caleb.wildviper"
         }
       },
       "oauth_client": [
         {
-          "client_id": "669283929214-jqr3cb625978a4ise2ratu1pesaadn8a.apps.googleusercontent.com",
+          "client_id": "429083982643-pi8sa2nrbhb0u2kv0da3s84aff0bfau6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "ca.uoit.caleb.wildviper",
@@ -21,13 +23,13 @@
           }
         },
         {
-          "client_id": "669283929214-lv3c7sq4p2ml3q0ptcae364t3rmhv65r.apps.googleusercontent.com",
+          "client_id": "429083982643-poj565u2s7da25b6hbmb7beia101neis.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBZva-eQ4L3FbWQ3AwyghwOfB6xzLPo6c4"
+          "current_key": "AIzaSyD1Ab_iMPelIq1VHi8hZMUz7RpVrS5SFz4"
         }
       ],
       "services": {
@@ -35,11 +37,16 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "429083982643-poj565u2s7da25b6hbmb7beia101neis.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }
