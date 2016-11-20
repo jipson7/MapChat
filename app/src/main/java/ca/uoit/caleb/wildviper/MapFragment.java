@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v13.app.FragmentCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,19 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks {
+public class MapFragment extends Fragment implements
+        OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleMap.OnMapLongClickListener {
+
+
+    private static final String TAG = "MAPDEBUG";
 
     private static final int RC_PERMISSION_REQUEST = 1231;
 
@@ -39,6 +47,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     private Activity mActivity;
     private LatLng mDefaultLocation;
     private LatLng mUserLocation;
+    private Marker mUserMarker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,8 +101,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     }
 
     private void moveToLocation(LatLng location) {
-        mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(location).title(mUser.getDisplayName()));
+        if (mUserMarker != null) {
+            mUserMarker.remove();
+        }
+        mUserMarker = mMap.addMarker(new MarkerOptions().position(location).title(mUser.getDisplayName()));
+        mUserMarker.showInfoWindow();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, mZoomLevel));
     }
 
@@ -135,6 +147,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        mMap.setOnMapLongClickListener(this);
+
         changeMapStyle(MapData.getMapStyle(mActivity));
 
         if (mUserLocation == null) {
@@ -148,6 +162,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(mActivity, mapStyle));
     }
 
+    /**
+     * On Map Click
+     * @param latLng - Location of click
+     */
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        String testMessage = "Hey there";
+        createMessageMarker(latLng, testMessage);
+    }
+
+    private void createMessageMarker(LatLng latLng, String testMessage) {
+        String user = mUser.getDisplayName();
+        MessageMarker message = new MessageMarker(mMap, latLng, user, testMessage);
+    }
 
     /**
      * Google Api Connected Success
@@ -197,4 +225,5 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         super.onLowMemory();
         mMapView.onLowMemory();
     }
+
 }
