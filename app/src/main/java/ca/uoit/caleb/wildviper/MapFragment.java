@@ -4,11 +4,12 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v13.app.FragmentCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +21,15 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 public class MapFragment extends Fragment implements
         OnMapReadyCallback,
@@ -104,9 +107,28 @@ public class MapFragment extends Fragment implements
         if (mUserMarker != null) {
             mUserMarker.remove();
         }
+
         mUserMarker = mMap.addMarker(new MarkerOptions().position(location).title(mUser.getDisplayName()));
         mUserMarker.showInfoWindow();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, mZoomLevel));
+        Picasso.with(mActivity)
+                .load(mUser.getPhotoUrl())
+                .into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        mUserMarker.setIcon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                    }
+                });
     }
 
 
@@ -169,12 +191,8 @@ public class MapFragment extends Fragment implements
     @Override
     public void onMapLongClick(LatLng latLng) {
         String testMessage = "Hey there";
-        createMessageMarker(latLng, testMessage);
-    }
 
-    private void createMessageMarker(LatLng latLng, String testMessage) {
-        String user = mUser.getDisplayName();
-        MessageMarker message = new MessageMarker(mMap, latLng, user, testMessage);
+        MessageMarker message = new MessageMarker(mActivity, mMap, latLng, testMessage, mUser);
     }
 
     /**
