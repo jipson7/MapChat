@@ -3,6 +3,7 @@ package ca.uoit.caleb.wildviper;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -95,6 +96,19 @@ public class MapFragment extends Fragment implements
         return v;
     }
 
+    /**
+     * Google Api Connected Success
+     */
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        setCurrentLocation();
+    }
+
+    /**
+     * Check user has set location permissions
+     * If so, move to users location
+     * If not, request location permissions
+     */
     private void setCurrentLocation() {
         if (mActivity.checkCallingOrSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -109,6 +123,20 @@ public class MapFragment extends Fragment implements
         }
     }
 
+    /**
+     * Start permission request
+     */
+    private void requestLocationPermissions() {
+        FragmentCompat.requestPermissions(
+                this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                RC_PERMISSION_REQUEST);
+    }
+
+    /**
+     * Drop marker of users profile image at location
+     * Center map around location
+     */
     private void moveToLocation(LatLng location) {
         if (mUserMarker != null) {
             mUserMarker.remove();
@@ -137,16 +165,9 @@ public class MapFragment extends Fragment implements
                 });
     }
 
-
-    private void requestLocationPermissions() {
-        FragmentCompat.requestPermissions(
-                this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                RC_PERMISSION_REQUEST);
-    }
-
     /**
      * Callback when user accepts or rejects Location Permission
+     * If user rejects move to default location, otherwise recall method to get user location
      * @param requestCode
      * @param permissions
      * @param grantResults
@@ -186,6 +207,9 @@ public class MapFragment extends Fragment implements
         }
     }
 
+    /**
+     * Get currently selected style from DB and set it on map
+     */
     public void setMapStyle() {
         mMap.setMapStyle(new MapStyleOptions(mMapStyleDBHelper.getSelectedStyleJson()));
     }
@@ -196,19 +220,12 @@ public class MapFragment extends Fragment implements
      */
     @Override
     public void onMapLongClick(LatLng latLng) {
-        String testMessage = "Hey there";
-
-        MessageMarker message = new MessageMarker(mActivity, mMap, latLng, testMessage, mUser);
+        //String testMessage = "Hey there";
+        //MessageMarker message = new MessageMarker(mActivity, mMap, latLng, testMessage, mUser);
+        Intent i = new Intent(mActivity, WriteMessageActivity.class);
+        startActivity(i);
     }
 
-    /**
-     * Google Api Connected Success
-     * @param bundle
-     */
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        setCurrentLocation();
-    }
 
     /**
      * Google Api connection suspended
@@ -219,6 +236,10 @@ public class MapFragment extends Fragment implements
 
     }
 
+
+    /**
+     * Activity LifeCycles
+     */
     @Override
     public void onStart() {
         mGoogleApiClient.connect();

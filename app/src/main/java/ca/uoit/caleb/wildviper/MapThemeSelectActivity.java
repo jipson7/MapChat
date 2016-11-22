@@ -19,7 +19,7 @@ public class MapThemeSelectActivity extends Activity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_theme_select);
-        setTitle("Select a Theme");
+        setTitle(R.string.map_style_window_title);
         mStyles = mMapStyleDBHelper.getAllStyles();
         mCurrentStyle = mMapStyleDBHelper.getSelectedStyleName();
         setRadioButtons();

@@ -7,10 +7,17 @@
     <string name="snackbar_no_internet">Unable to sign in without Internet</string>
     <string name="snackbar_unexpected_error">An Unknown Error Occured</string>
 
-    <!-- Main -->
     <!-- Drawer -->
     <string name="drawer_open">Open</string>
     <string name="drawer_closed">Closed</string>
     <string name="drawer_map_theme">Map Theme</string>
+
+    <!-- Map Style Select -->
+    <string name="map_style_window_title">Select Map Style</string>
+
+    <!-- Write Message Activity -->
+    <string name="write_message_window_title">Drop New Message</string>
+    <string name="write_message_btn_done">Done</string>
+    <string name="write_message_btn_cancel">Cancel</string>
 
 </resources>
