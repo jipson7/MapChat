@@ -13,9 +13,4 @@
     <string name="drawer_closed">Closed</string>
     <string name="drawer_map_theme">Map Theme</string>
 
-
-    <!-- Themes -->
-    <string name="theme_day">Day</string>
-    <string name="theme_night">Night</string>
-
 </resources>
