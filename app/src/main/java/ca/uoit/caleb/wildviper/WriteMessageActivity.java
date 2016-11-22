@@ -3,6 +3,7 @@ package ca.uoit.caleb.wildviper;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 
 public class WriteMessageActivity extends Activity {
 
@@ -14,7 +15,8 @@ public class WriteMessageActivity extends Activity {
     }
 
     public void done(View view) {
-
+        EditText messageView = (EditText) findViewById(R.id.write_message_txt);
+        String message = messageView.getText().toString();
     }
 
     public void cancel(View view) {
