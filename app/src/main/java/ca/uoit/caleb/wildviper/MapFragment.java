@@ -36,12 +36,10 @@ public class MapFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleMap.OnMapLongClickListener {
 
-
-    private static final String TAG = "MAPDEBUG";
-
     private static final int RC_PERMISSION_REQUEST = 1231;
 
     FirebaseUser mUser;
+    MapStyleDBHelper mMapStyleDBHelper;
 
     private GoogleApiClient mGoogleApiClient;
     private Float mZoomLevel = 15.0f;
@@ -57,13 +55,21 @@ public class MapFragment extends Fragment implements
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_map, container, false);
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        mUser = auth.getCurrentUser();
-
         /**
          * Get Parent Activity
          */
         mActivity = getActivity();
+
+        /**
+         * Get Current User
+         */
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        mUser = auth.getCurrentUser();
+
+        /**
+         * Get Database helper for Map Styles
+         */
+        mMapStyleDBHelper = new MapStyleDBHelper(mActivity);
 
         /**
          * Create Google Location Api object
@@ -171,7 +177,7 @@ public class MapFragment extends Fragment implements
 
         mMap.setOnMapLongClickListener(this);
 
-        changeMapStyle(MapData.getMapStyle(mActivity));
+        setMapStyle();
 
         if (mUserLocation == null) {
             moveToLocation(mDefaultLocation);
@@ -180,8 +186,8 @@ public class MapFragment extends Fragment implements
         }
     }
 
-    public void changeMapStyle(int mapStyle) {
-        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(mActivity, mapStyle));
+    public void setMapStyle() {
+        mMap.setMapStyle(new MapStyleOptions(mMapStyleDBHelper.getSelectedStyleJson()));
     }
 
     /**
@@ -228,6 +234,9 @@ public class MapFragment extends Fragment implements
 
     @Override
     public void onResume() {
+        if (mMap != null) {
+            setMapStyle();
+        }
         mMapView.onResume();
         super.onResume();
     }
