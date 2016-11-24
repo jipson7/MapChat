@@ -3,7 +3,6 @@ package ca.uoit.caleb.wildviper;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
@@ -30,8 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MapFragment extends Fragment implements
         OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleMap.OnMapLongClickListener {
+        GoogleApiClient.ConnectionCallbacks {
 
     private static final int RC_PERMISSION_REQUEST = 1231;
 
@@ -96,7 +94,7 @@ public class MapFragment extends Fragment implements
      */
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        setCurrentLocation();
+        setUserLocation();
     }
 
     /**
@@ -104,7 +102,7 @@ public class MapFragment extends Fragment implements
      * If so, move to users location
      * If not, request location permissions
      */
-    private void setCurrentLocation() {
+    private void setUserLocation() {
         if (mActivity.checkCallingOrSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (location != null) {
@@ -158,7 +156,7 @@ public class MapFragment extends Fragment implements
         switch (requestCode) {
             case RC_PERMISSION_REQUEST: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    setCurrentLocation();
+                    setUserLocation();
                 } else {
                     Toast.makeText(mActivity, "Moving to default location.", Toast.LENGTH_LONG).show();
                     moveToUserLocation();
@@ -176,16 +174,20 @@ public class MapFragment extends Fragment implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setOnMapLongClickListener(this);
         setMapStyle();
         moveToUserLocation();
+        setMessageListeners();
+    }
 
-        /**
-         * Get Firebase DB reference to message tree and set this as listener
-         * Listener is used to drop markers
-         */
+    /**
+     * Get Firebase DB reference to message tree and set this as listener
+     * Listener is used to drop markers
+     */
+    private void setMessageListeners() {
+        MessageListener messageListener = new MessageListener(mMap, mActivity);
         mMessagesReference = FirebaseDatabase.getInstance().getReference().child("messages");
-        mMessagesReference.addValueEventListener(new MessageListener(mMap, mActivity));
+        mMessagesReference.addChildEventListener(messageListener);
+        mMap.setOnMapLongClickListener(messageListener);
     }
 
     /**
@@ -193,18 +195,6 @@ public class MapFragment extends Fragment implements
      */
     public void setMapStyle() {
         mMap.setMapStyle(new MapStyleOptions(mMapStyleDBHelper.getSelectedStyleJson()));
-    }
-
-    /**
-     * On Map Click
-     * @param latLng - Location of click
-     */
-    @Override
-    public void onMapLongClick(LatLng latLng) {
-        Intent i = new Intent(mActivity, WriteMessageActivity.class);
-        i.putExtra("latitude", latLng.latitude);
-        i.putExtra("longitude", latLng.longitude);
-        startActivity(i);
     }
 
     /**
