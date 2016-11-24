@@ -9,13 +9,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MessageDBHelper {
 
-    private DatabaseReference mDatabase;
+    private DatabaseReference mMessageDBRef;
 
     MessageDBHelper() {
-        this.mDatabase = FirebaseDatabase.getInstance().getReference();
+        this.mMessageDBRef = FirebaseDatabase.getInstance().getReference().child("messages");
     }
 
     public void saveMessage(Message message) {
-        mDatabase.child("messages").setValue(message);
+        mMessageDBRef.push().setValue(message);
     }
 }

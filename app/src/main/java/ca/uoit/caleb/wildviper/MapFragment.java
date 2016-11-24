@@ -29,27 +29,32 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 public class MapFragment extends Fragment implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleMap.OnMapLongClickListener {
+        GoogleMap.OnMapLongClickListener,
+        ValueEventListener {
 
     private static final int RC_PERMISSION_REQUEST = 1231;
 
     FirebaseUser mUser;
     MapStyleDBHelper mMapStyleDBHelper;
+    DatabaseReference mMessagesReference;
 
     private GoogleApiClient mGoogleApiClient;
     private Float mZoomLevel = 15.0f;
     private GoogleMap mMap;
     private MapView mMapView;
     private Activity mActivity;
-    private LatLng mDefaultLocation;
     private LatLng mUserLocation;
-    private Marker mUserMarker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,6 +71,12 @@ public class MapFragment extends Fragment implements
          */
         FirebaseAuth auth = FirebaseAuth.getInstance();
         mUser = auth.getCurrentUser();
+
+        /**
+         * Get Firebase DB reference to message tree and set this as listener
+         */
+        mMessagesReference = FirebaseDatabase.getInstance().getReference().child("messages");
+        mMessagesReference.addValueEventListener(this);
 
         /**
          * Get Database helper for Map Styles
@@ -85,7 +96,7 @@ public class MapFragment extends Fragment implements
         /**
          * Set Default Location to Toronto
          */
-        mDefaultLocation = new LatLng(43.652, -79.3832);
+        mUserLocation = new LatLng(43.652, -79.3832);
 
         /**
          * Attach map to XML
@@ -115,7 +126,7 @@ public class MapFragment extends Fragment implements
             if (location != null) {
                 mUserLocation = new LatLng(location.getLatitude(), location.getLongitude());
                 if (mMap != null) {
-                    moveToLocation(mUserLocation);
+                    moveToUserLocation();
                 }
             }
         } else {
@@ -134,23 +145,27 @@ public class MapFragment extends Fragment implements
     }
 
     /**
-     * Drop marker of users profile image at location
      * Center map around location
      */
-    private void moveToLocation(LatLng location) {
-        if (mUserMarker != null) {
-            mUserMarker.remove();
-        }
+    private void moveToUserLocation() {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, mZoomLevel));
+        dropUserMarker();
+    }
 
-        mUserMarker = mMap.addMarker(new MarkerOptions().position(location).title(mUser.getDisplayName()));
-        mUserMarker.showInfoWindow();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, mZoomLevel));
+    /**
+     * Drop marker of users profile image at location
+     */
+    private void dropUserMarker() {
+        mMap.clear();
+        final Marker marker = mMap.addMarker(new MarkerOptions().position(mUserLocation).title(mUser.getDisplayName()));
+        marker.showInfoWindow();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, mZoomLevel));
         Picasso.with(mActivity)
                 .load(mUser.getPhotoUrl())
                 .into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        mUserMarker.setIcon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(bitmap));
                     }
 
                     @Override
@@ -164,6 +179,7 @@ public class MapFragment extends Fragment implements
                     }
                 });
     }
+
 
     /**
      * Callback when user accepts or rejects Location Permission
@@ -180,7 +196,7 @@ public class MapFragment extends Fragment implements
                     setCurrentLocation();
                 } else {
                     Toast.makeText(mActivity, "Moving to default location.", Toast.LENGTH_LONG).show();
-                    moveToLocation(mDefaultLocation);
+                    moveToUserLocation();
                 }
                 return;
             }
@@ -195,16 +211,9 @@ public class MapFragment extends Fragment implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         mMap.setOnMapLongClickListener(this);
-
         setMapStyle();
-
-        if (mUserLocation == null) {
-            moveToLocation(mDefaultLocation);
-        } else {
-            moveToLocation(mUserLocation);
-        }
+        moveToUserLocation();
     }
 
     /**
@@ -226,6 +235,30 @@ public class MapFragment extends Fragment implements
         startActivity(i);
     }
 
+    /**
+     * Listen for changes in the Firebase DB
+     * @param dataSnapshot
+     */
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        mMap.clear();
+        dropUserMarker();
+        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+            Message message = postSnapshot.getValue(Message.class);
+            message.dropMarker(mMap, mActivity);
+        }
+
+    }
+
+    /**
+     * Listen for errors on the Firebase DB connection
+     * @param databaseError
+     */
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+        //This usually only fails because user isn't authenticated
+        //so we shouldn't have to worry about it
+    }
 
     /**
      * Google Api connection suspended
@@ -273,5 +306,4 @@ public class MapFragment extends Fragment implements
         super.onLowMemory();
         mMapView.onLowMemory();
     }
-
 }
