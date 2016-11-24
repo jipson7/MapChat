@@ -7,20 +7,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class WriteMessageActivity extends Activity {
 
-    private MessageDBHelper mMessageDBHelper;
+    private FirebaseDBHelper mFirebaseDBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_message);
         setTitle(R.string.write_message_window_title);
-        mMessageDBHelper = new MessageDBHelper();
+        mFirebaseDBHelper = new FirebaseDBHelper();
     }
 
     public void done(View view) {
@@ -38,7 +37,7 @@ public class WriteMessageActivity extends Activity {
                 intent.getDoubleExtra("latitude", 0),
                 intent.getDoubleExtra("longitude", 0));
 
-        mMessageDBHelper.saveMessage(message);
+        mFirebaseDBHelper.saveMessage(message);
         finish();
     }
 

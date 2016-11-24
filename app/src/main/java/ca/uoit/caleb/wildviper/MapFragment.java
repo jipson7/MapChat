@@ -5,9 +5,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v13.app.FragmentCompat;
@@ -22,26 +21,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 public class MapFragment extends Fragment implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleMap.OnMapLongClickListener,
-        ValueEventListener {
+        GoogleMap.OnMapLongClickListener {
 
     private static final int RC_PERMISSION_REQUEST = 1231;
 
@@ -71,12 +61,6 @@ public class MapFragment extends Fragment implements
          */
         FirebaseAuth auth = FirebaseAuth.getInstance();
         mUser = auth.getCurrentUser();
-
-        /**
-         * Get Firebase DB reference to message tree and set this as listener
-         */
-        mMessagesReference = FirebaseDatabase.getInstance().getReference().child("messages");
-        mMessagesReference.addValueEventListener(this);
 
         /**
          * Get Database helper for Map Styles
@@ -149,35 +133,16 @@ public class MapFragment extends Fragment implements
      */
     private void moveToUserLocation() {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, mZoomLevel));
-        dropUserMarker();
+        dropUserOverlay();
     }
 
     /**
      * Drop marker of users profile image at location
      */
-    private void dropUserMarker() {
-        mMap.clear();
-        final Marker marker = mMap.addMarker(new MarkerOptions().position(mUserLocation).title(mUser.getDisplayName()));
-        marker.showInfoWindow();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, mZoomLevel));
-        Picasso.with(mActivity)
-                .load(mUser.getPhotoUrl())
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(bitmap));
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                    }
-                });
+    private void dropUserOverlay() {
+        Uri photoUri = mUser.getPhotoUrl();
+        String username = mUser.getDisplayName();
+        UserOverlay userOverlay = new UserOverlay(photoUri, username, mUserLocation, mMap);
     }
 
 
@@ -214,6 +179,13 @@ public class MapFragment extends Fragment implements
         mMap.setOnMapLongClickListener(this);
         setMapStyle();
         moveToUserLocation();
+
+        /**
+         * Get Firebase DB reference to message tree and set this as listener
+         * Listener is used to drop markers
+         */
+        mMessagesReference = FirebaseDatabase.getInstance().getReference().child("messages");
+        mMessagesReference.addValueEventListener(new MessageListener(mMap, mActivity));
     }
 
     /**
@@ -233,31 +205,6 @@ public class MapFragment extends Fragment implements
         i.putExtra("latitude", latLng.latitude);
         i.putExtra("longitude", latLng.longitude);
         startActivity(i);
-    }
-
-    /**
-     * Listen for changes in the Firebase DB
-     * @param dataSnapshot
-     */
-    @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
-        mMap.clear();
-        dropUserMarker();
-        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-            Message message = postSnapshot.getValue(Message.class);
-            message.dropMarker(mMap, mActivity);
-        }
-
-    }
-
-    /**
-     * Listen for errors on the Firebase DB connection
-     * @param databaseError
-     */
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-        //This usually only fails because user isn't authenticated
-        //so we shouldn't have to worry about it
     }
 
     /**
