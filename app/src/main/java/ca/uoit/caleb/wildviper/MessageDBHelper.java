@@ -16,6 +16,6 @@ public class MessageDBHelper {
     }
 
     public void saveMessage(Message message) {
-
+        mDatabase.child("messages").setValue(message);
     }
 }
