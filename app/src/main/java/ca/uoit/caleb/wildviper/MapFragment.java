@@ -220,9 +220,9 @@ public class MapFragment extends Fragment implements
      */
     @Override
     public void onMapLongClick(LatLng latLng) {
-        //String testMessage = "Hey there";
-        //MessageMarker message = new MessageMarker(mActivity, mMap, latLng, testMessage, mUser);
         Intent i = new Intent(mActivity, WriteMessageActivity.class);
+        i.putExtra("latitude", latLng.latitude);
+        i.putExtra("longitude", latLng.longitude);
         startActivity(i);
     }
 

@@ -15,51 +15,51 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 /**
- * Created by caleb on 2016-11-19.
+ * Created by caleb on 2016-11-23.
  */
 
-public class MessageMarker {
-
+public class Message {
     private String mMessage;
-    private LatLng mLatLng;
+    private String mPhotoUrl;
     private String mUsername;
+    private double latitude;
+    private double longitude;
+
+
     private Marker mMarkerHandle;
 
-    public MessageMarker(Context context, GoogleMap map, LatLng latLng, String message, FirebaseUser user) {
+    public Message(String username, String photoUrl, String message, Double latitude, Double longitude) {
         this.mMessage = message;
-        this.mUsername = user.getDisplayName();
-        this.mLatLng = latLng;
-        this.mMarkerHandle = map.addMarker(new MarkerOptions().position(latLng).title(message));
-        this.mMarkerHandle.showInfoWindow();
-        Uri photoUrl = user.getPhotoUrl();
-        if (photoUrl != null) {
-            fetchUserPhoto(user.getPhotoUrl(), context);
-        }
+        this.mPhotoUrl = photoUrl;
+        this.mUsername = username;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
-    private void fetchUserPhoto(Uri photoUrl, Context context) {
+    public void dropMarker(GoogleMap map) {
+        String message = mUsername + ": " + mMessage;
+        this.mMarkerHandle = map.addMarker(new MarkerOptions().position(getLatLng()).title(message));
+        this.mMarkerHandle.showInfoWindow();
+    }
+
+    public void displayPhoto(Context context) {
+        if (mPhotoUrl == null || mMarkerHandle == null) {
+            return;
+        }
         Picasso.with(context)
-                .load(photoUrl)
+                .load(mPhotoUrl)
                 .into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         mMarkerHandle.setIcon(BitmapDescriptorFactory.fromBitmap(bitmap));
                     }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                    }
+                    public void onBitmapFailed(Drawable errorDrawable) {}
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {}
                 });
     }
 
-    public void remove(){
-        this.mMarkerHandle.remove();
+    private LatLng getLatLng() {
+        return new LatLng(latitude, longitude);
     }
 
 }
