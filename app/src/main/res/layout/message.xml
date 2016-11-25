@@ -8,6 +8,7 @@
               android:background="@drawable/message_border">
 
     <TextView
+        android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/message_window_username"/>
