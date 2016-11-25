@@ -6,13 +6,10 @@ import android.graphics.Color;
 import android.net.Uri;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
-
-import java.net.URL;
 
 /**
  * Created by caleb on 2016-11-24.

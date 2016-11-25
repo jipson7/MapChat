@@ -2,7 +2,6 @@ package ca.uoit.caleb.wildviper;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 
 import java.io.IOException;
