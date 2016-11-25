@@ -15,6 +15,8 @@ import com.google.android.gms.maps.model.LatLng;
  */
 
 public class UserOverlay implements ProfileImageSetter {
+
+    private final Float photoWidth = 100f;
     private Uri mPhotoUrl;
     private String mUsername;
     private LatLng mLatLng;
@@ -36,7 +38,7 @@ public class UserOverlay implements ProfileImageSetter {
         GroundOverlayOptions userOverlayOptions = new GroundOverlayOptions()
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.default_user_icon))
                 .anchor(0, 1)
-                .position(mLatLng, 100f);
+                .position(mLatLng, photoWidth);
         mOverlayHandle = map.addGroundOverlay(userOverlayOptions);
         if (mPhotoUrl != null) {
             mProfileImageFetcher.execute(mPhotoUrl);

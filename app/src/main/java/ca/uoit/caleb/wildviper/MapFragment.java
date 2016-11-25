@@ -3,6 +3,7 @@ package ca.uoit.caleb.wildviper;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
@@ -29,7 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MapFragment extends Fragment implements
         OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks {
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleMap.OnMapLongClickListener {
 
     private static final int RC_PERMISSION_REQUEST = 1231;
 
@@ -49,9 +51,6 @@ public class MapFragment extends Fragment implements
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_map, container, false);
 
-        /**
-         * Get Parent Activity
-         */
         mActivity = getActivity();
 
         /**
@@ -177,21 +176,22 @@ public class MapFragment extends Fragment implements
         setMapStyle();
         mMap.getUiSettings().setMapToolbarEnabled(false);
         moveToUserLocation();
-        setMessageListeners();
+        mMessagesReference = FirebaseDatabase.getInstance().getReference().child("messages");
+        mMessagesReference.addChildEventListener(new MessageListener(mMap));
+        mMap.setOnMapLongClickListener(this);
+        mMap.setInfoWindowAdapter(new MessageWindowAdapter(mActivity));
     }
 
     /**
-     * Get Firebase DB reference to message tree and set this as listener
-     * Listener is used to drop markers
+     * Map Long Click to Add new Message
+     * @param latLng
      */
-    private void setMessageListeners() {
-        MessageListener messageListener = new MessageListener(mMap, mActivity);
-        mMessagesReference = FirebaseDatabase.getInstance().getReference().child("messages");
-        mMessagesReference.addChildEventListener(messageListener);
-
-        mMap.setOnMapLongClickListener(messageListener);
-
-        mMap.setInfoWindowAdapter(new MessageWindowAdapter(mActivity));
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        Intent i = new Intent(mActivity, WriteMessageActivity.class);
+        i.putExtra("latitude", latLng.latitude);
+        i.putExtra("longitude", latLng.longitude);
+        mActivity.startActivity(i);
     }
 
     /**

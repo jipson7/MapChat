@@ -40,30 +40,17 @@ public class Message {
     }
 
     @Exclude
-    public void dropMarker(GoogleMap map, Context context) {
+    public void dropMarker(GoogleMap map) {
         MarkerOptions options = new MarkerOptions().position(getLatLng()).title(username).snippet(message);
         this.mMarkerHandle = map.addMarker(options);
         this.mMarkerHandle.showInfoWindow();
         if (photoUrl != null) {
-            displayPhoto(context);
+            displayPhoto();
         }
     }
 
-    private void displayPhoto(Context context) {
-        Picasso.with(context)
-                .load(photoUrl)
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        mMarkerHandle.setIcon(BitmapDescriptorFactory.fromBitmap(bitmap));
-                    }
-                    public void onBitmapFailed(Drawable errorDrawable) {
-                        mMarkerHandle.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.default_message_icon));
-                    }
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-                        mMarkerHandle.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.default_message_icon));
-                    }
-                });
+    private void displayPhoto() {
+
     }
 
     private LatLng getLatLng() {
