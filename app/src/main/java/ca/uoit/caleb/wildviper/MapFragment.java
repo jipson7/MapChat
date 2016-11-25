@@ -108,6 +108,7 @@ public class MapFragment extends Fragment implements
                 mUserLocation = new LatLng(location.getLatitude(), location.getLongitude());
                 if (mMap != null) {
                     moveToUserLocation();
+                    mMap.setMyLocationEnabled(true);
                 }
             }
         } else {
