@@ -3,6 +3,7 @@ package ca.uoit.caleb.wildviper;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.view.View;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -57,8 +58,12 @@ public class Message {
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         mMarkerHandle.setIcon(BitmapDescriptorFactory.fromBitmap(bitmap));
                     }
-                    public void onBitmapFailed(Drawable errorDrawable) {}
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {}
+                    public void onBitmapFailed(Drawable errorDrawable) {
+                        mMarkerHandle.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.default_message_icon));
+                    }
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        mMarkerHandle.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.default_message_icon));
+                    }
                 });
     }
 
