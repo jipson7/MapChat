@@ -188,7 +188,10 @@ public class MapFragment extends Fragment implements
         MessageListener messageListener = new MessageListener(mMap, mActivity);
         mMessagesReference = FirebaseDatabase.getInstance().getReference().child("messages");
         mMessagesReference.addChildEventListener(messageListener);
+
         mMap.setOnMapLongClickListener(messageListener);
+
+        mMap.setInfoWindowAdapter(new MessageWindowAdapter(mActivity));
     }
 
     /**

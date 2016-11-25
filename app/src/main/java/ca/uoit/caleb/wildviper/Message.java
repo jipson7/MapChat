@@ -42,8 +42,8 @@ public class Message {
 
     @Exclude
     public void dropMarker(GoogleMap map, Context context) {
-        String displayMessage = username + ": " + message;
-        this.mMarkerHandle = map.addMarker(new MarkerOptions().position(getLatLng()).title(displayMessage));
+        MarkerOptions options = new MarkerOptions().position(getLatLng()).title(username).snippet(message);
+        this.mMarkerHandle = map.addMarker(options);
         this.mMarkerHandle.showInfoWindow();
         if (photoUrl != null) {
             displayPhoto(context);
