@@ -6,14 +6,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class FirebaseDBHelper  {
 
-    private DatabaseReference mMessageDBRef;
+    private DatabaseReference mDBRef;
 
     FirebaseDBHelper() {
-        this.mMessageDBRef = FirebaseDatabase.getInstance().getReference().child("messages");
+        this.mDBRef = FirebaseDatabase.getInstance().getReference();
     }
 
 
     public void saveMessage(Message message) {
-        mMessageDBRef.push().setValue(message);
+        mDBRef.child("messages").push().setValue(message);
     }
 }
