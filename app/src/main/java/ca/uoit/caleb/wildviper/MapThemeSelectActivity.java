@@ -2,6 +2,7 @@ package ca.uoit.caleb.wildviper;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -30,6 +31,7 @@ public class MapThemeSelectActivity extends Activity implements View.OnClickList
         radioGroup.setOrientation(RadioGroup.VERTICAL);
         for (int i = 0; i < mStyles.size(); i++) {
             String style = mStyles.get(i);
+            Log.i("MAPSTYLELOADED", " = " + style);
             RadioButton styleRadio = new RadioButton(this);
             if (mCurrentStyle.equals(style)) {
                 styleRadio.setChecked(true);

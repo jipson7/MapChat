@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class MapStyleDBHelper extends SQLiteOpenHelper {
 
-    private static final String FILENAME = "map_styles.db";
+    private static final String FILENAME = "map_style_storage.db";
 
     private static final int VERSION = 1;
 
@@ -42,9 +42,11 @@ public class MapStyleDBHelper extends SQLiteOpenHelper {
          * Populate with styles from resource files
          */
         String dayStyle = context.getResources().getString(R.string.map_style_day);
-        addMapStyle(db, "Day", dayStyle, 1);
+        addMapStyle(db, "Day", dayStyle, 0);
         String nightStyle = context.getResources().getString(R.string.map_style_night);
         addMapStyle(db, "Night", nightStyle, 0);
+        String blueStyle = context.getResources().getString(R.string.map_style_blue);
+        addMapStyle(db, "Blue", blueStyle, 1);
     }
 
     @Override
