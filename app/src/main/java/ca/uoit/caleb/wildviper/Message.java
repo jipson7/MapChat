@@ -1,8 +1,7 @@
 package ca.uoit.caleb.wildviper;
 
-import android.content.Context;
+
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -11,21 +10,18 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 /**
  * Created by caleb on 2016-11-23.
  */
 
 @IgnoreExtraProperties
-public class Message {
+public class Message implements ProfileImageSetter {
     public String username;
     public String photoUrl;
     public String message;
     public double latitude;
     public double longitude;
-
 
     private Marker mMarkerHandle;
 
@@ -45,16 +41,19 @@ public class Message {
         this.mMarkerHandle = map.addMarker(options);
         this.mMarkerHandle.showInfoWindow();
         if (photoUrl != null) {
-            displayPhoto();
+            ProfileImageFetcher mProfileImageFetcher = new ProfileImageFetcher(this);
+            mProfileImageFetcher.execute(photoUrl);
         }
     }
 
-    private void displayPhoto() {
-
-    }
 
     private LatLng getLatLng() {
         return new LatLng(latitude, longitude);
     }
 
+    @Exclude
+    @Override
+    public void setProfileImage(Bitmap bitmap) {
+        mMarkerHandle.setIcon(BitmapDescriptorFactory.fromBitmap(bitmap));
+    }
 }

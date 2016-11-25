@@ -28,9 +28,9 @@ public class ProfileImageFetcher extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] objects) {
         Bitmap profilePhoto = null;
-        Uri photoUri = (Uri) objects[0];
+        String photoUrlString = (String) objects[0];
         try {
-            URL photoUrl = new URL(photoUri.toString());
+            URL photoUrl = new URL(photoUrlString);
             HttpURLConnection connection = (HttpURLConnection) photoUrl.openConnection();
             connection.setDoInput(true);
             connection.connect();
