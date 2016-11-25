@@ -175,6 +175,7 @@ public class MapFragment extends Fragment implements
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         setMapStyle();
+        mMap.getUiSettings().setMapToolbarEnabled(false);
         moveToUserLocation();
         setMessageListeners();
     }
