@@ -28,7 +28,7 @@ public class UserOverlay {
 
     private void dropOverlay(GoogleMap map) {
         GroundOverlayOptions userOverlayOptions = new GroundOverlayOptions()
-                .image(BitmapDescriptorFactory.fromResource(R.drawable.default_user_profile))
+                .image(BitmapDescriptorFactory.fromResource(R.drawable.default_user_icon))
                 .anchor(0, 1)
                 .position(mLatLng, 100f);
         mOverlayHandle = map.addGroundOverlay(userOverlayOptions);
