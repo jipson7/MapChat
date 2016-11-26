@@ -9,6 +9,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v13.app.FragmentCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -193,7 +194,9 @@ public class MapFragment extends Fragment implements
     @Override
     public void onInfoWindowLongClick(Marker marker) {
         String messageKey = mMessageListener.getMessageKey(marker.getId());
-        mFirebaseDBHelper.deleteSingleMessage(messageKey);
+        if (messageKey != null) {
+            mFirebaseDBHelper.deleteSingleMessage(messageKey);
+        }
     }
 
     /**
