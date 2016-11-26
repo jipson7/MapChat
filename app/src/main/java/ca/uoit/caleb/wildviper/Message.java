@@ -38,14 +38,15 @@ public class Message implements ProfileImageSetter {
     }
 
     @Exclude
-    public void dropMarker(GoogleMap map) {
+    public Marker dropMarker(GoogleMap map) {
         MarkerOptions options = new MarkerOptions().position(getLatLng()).title(username).snippet(message);
-        this.mMarkerHandle = map.addMarker(options);
-        this.mMarkerHandle.showInfoWindow();
+        mMarkerHandle = map.addMarker(options);
+        mMarkerHandle.showInfoWindow();
         if (photoUrl != null) {
             ProfileImageFetcher mProfileImageFetcher = new ProfileImageFetcher(this);
             mProfileImageFetcher.execute(photoUrl);
         }
+        return mMarkerHandle;
     }
 
 

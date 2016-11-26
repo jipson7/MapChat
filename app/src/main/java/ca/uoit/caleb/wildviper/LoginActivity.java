@@ -28,7 +28,8 @@ public class LoginActivity extends Activity {
 
 
         if (mAuth.getCurrentUser() != null) {
-            launchMainActivity();
+            //TODO Uncomment before submitting
+            //launchMainActivity();
         }
     }
 

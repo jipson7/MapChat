@@ -22,19 +22,22 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MapFragment extends Fragment implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleMap.OnMapLongClickListener {
+        GoogleMap.OnMapLongClickListener,
+        GoogleMap.OnInfoWindowLongClickListener {
 
     private static final int RC_PERMISSION_REQUEST = 1231;
 
     User mUser;
     MapStyleDBHelper mMapStyleDBHelper;
     FirebaseDBHelper mFirebaseDBHelper;
+    MessageListener mMessageListener;
 
     private GoogleApiClient mGoogleApiClient;
     private Float mZoomLevel = 15.0f;
@@ -166,9 +169,11 @@ public class MapFragment extends Fragment implements
         setMapStyle();
         mMap.getUiSettings().setMapToolbarEnabled(false);
         moveToUserLocation();
-        mFirebaseDBHelper.setMessageListener(new MessageListener(mMap));
+        mMessageListener = new MessageListener(mMap);
+        mFirebaseDBHelper.setMessageListener(mMessageListener);
         mFirebaseDBHelper.setUserListener(new UserListener(mMap));
         mMap.setOnMapLongClickListener(this);
+        mMap.setOnInfoWindowLongClickListener(this);
         mMap.setInfoWindowAdapter(new MessageWindowAdapter(mActivity));
     }
 
@@ -182,6 +187,14 @@ public class MapFragment extends Fragment implements
         i.putExtra("latitude", latLng.latitude);
         i.putExtra("longitude", latLng.longitude);
         mActivity.startActivity(i);
+    }
+
+
+    @Override
+    public void onInfoWindowLongClick(Marker marker) {
+        String messageKey = mMessageListener.getMessageKey(marker.getId());
+        mFirebaseDBHelper.deleteSingleMessage(messageKey);
+        marker.remove();
     }
 
     /**
@@ -240,15 +253,10 @@ public class MapFragment extends Fragment implements
     }
 
     @Override
-    public void onPause() {
-        markUserOffline(mUser);
-        super.onPause();
-    }
-
-    @Override
     public void onDestroy() {
-        super.onDestroy();
+        markUserOffline(mUser);
         mMapView.onDestroy();
+        super.onDestroy();
     }
 
     @Override
@@ -256,6 +264,5 @@ public class MapFragment extends Fragment implements
         super.onLowMemory();
         mMapView.onLowMemory();
     }
-
 
 }

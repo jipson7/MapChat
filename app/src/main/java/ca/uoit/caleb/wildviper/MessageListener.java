@@ -4,6 +4,7 @@ package ca.uoit.caleb.wildviper;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,11 +18,15 @@ import java.util.HashMap;
 public class MessageListener implements ChildEventListener{
 
     private GoogleMap mMapReference;
-    private HashMap<String, Message> mMessages;
+    private HashMap<String, String> mMessageKeys;
 
     public MessageListener(GoogleMap map) {
         this.mMapReference = map;
-        mMessages = new HashMap<>();
+        mMessageKeys = new HashMap<>();
+    }
+
+    public String getMessageKey(String markerId) {
+        return mMessageKeys.get(markerId);
     }
 
     /**
@@ -32,8 +37,8 @@ public class MessageListener implements ChildEventListener{
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
         Message message = dataSnapshot.getValue(Message.class);
-        message.dropMarker(mMapReference);
-        mMessages.put(dataSnapshot.getKey(), message);
+        Marker marker = message.dropMarker(mMapReference);
+        mMessageKeys.put(marker.getId(), dataSnapshot.getKey());
     }
 
     @Override
@@ -42,9 +47,7 @@ public class MessageListener implements ChildEventListener{
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
-        Message message = mMessages.get(dataSnapshot.getKey());
-        message.remove();
-        mMessages.remove(dataSnapshot.getKey());
+        mMessageKeys.values().remove(dataSnapshot.getKey());
     }
 
     @Override
