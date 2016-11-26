@@ -87,6 +87,7 @@ public class MainActivity extends FragmentActivity{
     public void deleteMessages(View view) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         (new FirebaseDBHelper()).deleteAllMessages(userId);
+        mDrawerLayout.closeDrawers();
     }
 
     public void signOut(View view) {

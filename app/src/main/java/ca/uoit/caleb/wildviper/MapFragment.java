@@ -194,7 +194,6 @@ public class MapFragment extends Fragment implements
     public void onInfoWindowLongClick(Marker marker) {
         String messageKey = mMessageListener.getMessageKey(marker.getId());
         mFirebaseDBHelper.deleteSingleMessage(messageKey);
-        marker.remove();
     }
 
     /**

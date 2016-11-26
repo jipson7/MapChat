@@ -49,6 +49,10 @@ public class Message implements ProfileImageSetter {
         return mMarkerHandle;
     }
 
+    @Exclude
+    public String getMarkerId() {
+        return mMarkerHandle.getId();
+    }
 
     private LatLng getLatLng() {
         return new LatLng(latitude, longitude);

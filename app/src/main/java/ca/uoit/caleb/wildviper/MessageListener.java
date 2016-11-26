@@ -10,6 +10,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by caleb on 2016-11-24.
@@ -18,15 +19,23 @@ import java.util.HashMap;
 public class MessageListener implements ChildEventListener{
 
     private GoogleMap mMapReference;
-    private HashMap<String, String> mMessageKeys;
+    private HashMap<String, Message> mMessages;
 
     public MessageListener(GoogleMap map) {
         this.mMapReference = map;
-        mMessageKeys = new HashMap<>();
+        mMessages = new HashMap<>();
     }
 
+
     public String getMessageKey(String markerId) {
-        return mMessageKeys.get(markerId);
+        String messageKey = "";
+        for (Map.Entry<String, Message> entry : mMessages.entrySet()) {
+            Message message = entry.getValue();
+            if (message.getMarkerId() == markerId) {
+                messageKey = entry.getKey();
+            }
+        }
+        return messageKey;
     }
 
     /**
@@ -37,8 +46,8 @@ public class MessageListener implements ChildEventListener{
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
         Message message = dataSnapshot.getValue(Message.class);
-        Marker marker = message.dropMarker(mMapReference);
-        mMessageKeys.put(marker.getId(), dataSnapshot.getKey());
+        message.dropMarker(mMapReference);
+        mMessages.put(dataSnapshot.getKey(), message);
     }
 
     @Override
@@ -47,7 +56,9 @@ public class MessageListener implements ChildEventListener{
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
-        mMessageKeys.values().remove(dataSnapshot.getKey());
+        Message message = mMessages.get(dataSnapshot.getKey());
+        message.remove();
+        mMessages.remove(dataSnapshot.getKey());
     }
 
     @Override
