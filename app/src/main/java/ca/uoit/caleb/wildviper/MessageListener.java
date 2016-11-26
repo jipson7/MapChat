@@ -8,15 +8,20 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
+import java.util.HashMap;
+
 /**
  * Created by caleb on 2016-11-24.
  */
 
 public class MessageListener implements ChildEventListener{
+
     private GoogleMap mMapReference;
+    private HashMap<String, Message> mMessages;
 
     public MessageListener(GoogleMap map) {
         this.mMapReference = map;
+        mMessages = new HashMap<>();
     }
 
     /**
@@ -26,21 +31,20 @@ public class MessageListener implements ChildEventListener{
      */
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        Log.i("Unique key", dataSnapshot.getKey());
-        //TODO Use key to create hashmap with marker handles
         Message message = dataSnapshot.getValue(Message.class);
         message.dropMarker(mMapReference);
+        mMessages.put(dataSnapshot.getKey(), message);
     }
 
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
     }
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
-        //TODO use key from above to remove individual marker handles as they are removed
-        //TODO do the same with user
+        Message message = mMessages.get(dataSnapshot.getKey());
+        message.remove();
+        mMessages.remove(dataSnapshot.getKey());
     }
 
     @Override

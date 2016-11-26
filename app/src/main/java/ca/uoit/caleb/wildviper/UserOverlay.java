@@ -36,6 +36,7 @@ public class UserOverlay implements ProfileImageSetter {
     }
 
     private void dropOverlay(GoogleMap map) {
+        //TODO Add click callback to user overlay to display user information
         GroundOverlayOptions userOverlayOptions = new GroundOverlayOptions()
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.default_user_icon))
                 .anchor(0, 1)

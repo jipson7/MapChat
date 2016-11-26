@@ -31,6 +31,7 @@ public class WriteMessageActivity extends Activity {
         Uri photoUrl = user.getPhotoUrl();
 
         Message message = new Message(
+                user.getUid(),
                 user.getDisplayName(),
                 (photoUrl != null) ? photoUrl.toString() : null,
                 messageText,

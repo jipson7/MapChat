@@ -17,6 +17,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
 public class Message implements ProfileImageSetter {
+    public String userid;
     public String username;
     public String photoUrl;
     public String message;
@@ -27,8 +28,8 @@ public class Message implements ProfileImageSetter {
 
     public Message() {}
 
-    public Message(String username, String photoUrl, String message, Double latitude, Double longitude) {
-
+    public Message(String userid, String username, String photoUrl, String message, Double latitude, Double longitude) {
+        this.userid = userid;
         this.message = message;
         this.photoUrl = photoUrl;
         this.username = username;
@@ -56,5 +57,10 @@ public class Message implements ProfileImageSetter {
     @Override
     public void setProfileImage(Bitmap bitmap) {
         mMarkerHandle.setIcon(BitmapDescriptorFactory.fromBitmap(bitmap));
+    }
+
+    @Exclude
+    public void remove() {
+        mMarkerHandle.remove();
     }
 }
