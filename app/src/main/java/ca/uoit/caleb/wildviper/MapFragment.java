@@ -193,9 +193,12 @@ public class MapFragment extends Fragment implements
 
     @Override
     public void onInfoWindowLongClick(Marker marker) {
-        String messageKey = mMessageListener.getMessageKey(marker.getId());
+        String userId = mUser.id;
+        String messageKey = mMessageListener.getMessageKey(marker.getId(), userId);
         if (messageKey != null) {
             mFirebaseDBHelper.deleteSingleMessage(messageKey);
+        } else {
+            Toast.makeText(mActivity, getString(R.string.map_fragment_toast_delete_error), Toast.LENGTH_SHORT).show();
         }
     }
 

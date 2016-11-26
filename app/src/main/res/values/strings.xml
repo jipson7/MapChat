@@ -16,6 +16,9 @@
     <string name="drawer_delete_messages">Remove My Messages</string>
     <string name="drawer_sign_out">Sign Out</string>
 
+    <!-- Map Fragment -->
+    <string name="map_fragment_toast_delete_error">Cannot delete another user's message.</string>
+
     <!-- Map Style Select -->
     <string name="map_style_window_title">Select Map Style</string>
 

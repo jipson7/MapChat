@@ -27,11 +27,11 @@ public class MessageListener implements ChildEventListener{
     }
 
 
-    public String getMessageKey(String markerId) {
+    public String getMessageKey(String markerId, String userId) {
         String messageKey = null;
         for (Map.Entry<String, Message> entry : mMessages.entrySet()) {
             Message message = entry.getValue();
-            if (message.getMarkerId().equals(markerId)) {
+            if (message.getMarkerId().equals(markerId) && message.userid.equals(userId)) {
                 messageKey = entry.getKey();
             }
         }
