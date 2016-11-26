@@ -12,16 +12,27 @@ public class FirebaseDBHelper  {
         this.mDBRef = FirebaseDatabase.getInstance().getReference();
     }
 
+    public void setMessageListener(MessageListener messageListener) {
+        getMessagesReference().addChildEventListener(messageListener);
+    }
 
     public void saveMessage(Message message) {
-        mDBRef.child("messages").push().setValue(message);
+        getMessagesReference().push().setValue(message);
     }
 
     public void saveUser(User user) {
-        mDBRef.child("users").child(user.id).setValue(user);
+        getUsersReference().child(user.id).setValue(user);
     }
 
     public void deleteUser(User user) {
-        mDBRef.child("users").child(user.id).removeValue();
+        getUsersReference().child(user.id).removeValue();
+    }
+
+    private DatabaseReference getMessagesReference() {
+        return mDBRef.child("messages");
+    }
+
+    private DatabaseReference getUsersReference() {
+        return mDBRef.child("users");
     }
 }

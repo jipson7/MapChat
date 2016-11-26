@@ -24,8 +24,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class MapFragment extends Fragment implements
         OnMapReadyCallback,
@@ -37,7 +35,6 @@ public class MapFragment extends Fragment implements
     User mUser;
     MapStyleDBHelper mMapStyleDBHelper;
     FirebaseDBHelper mFirebaseDBHelper;
-    DatabaseReference mMessagesReference;
 
     private GoogleApiClient mGoogleApiClient;
     private Float mZoomLevel = 15.0f;
@@ -169,8 +166,7 @@ public class MapFragment extends Fragment implements
         setMapStyle();
         mMap.getUiSettings().setMapToolbarEnabled(false);
         moveToUserLocation();
-        mMessagesReference = FirebaseDatabase.getInstance().getReference().child("messages");
-        mMessagesReference.addChildEventListener(new MessageListener(mMap));
+        mFirebaseDBHelper.setMessageListener(new MessageListener(mMap));
         mMap.setOnMapLongClickListener(this);
         mMap.setInfoWindowAdapter(new MessageWindowAdapter(mActivity));
     }
