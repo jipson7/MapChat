@@ -167,6 +167,7 @@ public class MapFragment extends Fragment implements
         mMap.getUiSettings().setMapToolbarEnabled(false);
         moveToUserLocation();
         mFirebaseDBHelper.setMessageListener(new MessageListener(mMap));
+        mFirebaseDBHelper.setUserListener(new UserListener(mMap));
         mMap.setOnMapLongClickListener(this);
         mMap.setInfoWindowAdapter(new MessageWindowAdapter(mActivity));
     }

@@ -60,4 +60,8 @@ public class UserOverlay implements ProfileImageSetter {
         canvas.drawBitmap(bmp, borderSize, borderSize, null);
         return bmpWithBorder;
     }
+
+    public void remove(){
+        this.mOverlayHandle.remove();
+    }
 }
