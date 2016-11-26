@@ -218,14 +218,12 @@ public class MapFragment extends Fragment implements
      */
     @Override
     public void onStart() {
-        markUserOnline(mUser);
         mGoogleApiClient.connect();
         super.onStart();
     }
 
     @Override
     public void onStop() {
-        markUserOffline(mUser);
         mGoogleApiClient.disconnect();
         super.onStop();
     }
@@ -236,8 +234,15 @@ public class MapFragment extends Fragment implements
         if (mMap != null) {
             setMapStyle();
         }
+        markUserOnline(mUser);
         mMapView.onResume();
         super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        markUserOffline(mUser);
+        super.onPause();
     }
 
     @Override
