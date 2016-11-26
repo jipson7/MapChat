@@ -6,7 +6,6 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v13.app.FragmentCompat;
@@ -35,8 +34,9 @@ public class MapFragment extends Fragment implements
 
     private static final int RC_PERMISSION_REQUEST = 1231;
 
-    FirebaseUser mUser;
+    User mUser;
     MapStyleDBHelper mMapStyleDBHelper;
+    FirebaseDBHelper mFirebaseDBHelper;
     DatabaseReference mMessagesReference;
 
     private GoogleApiClient mGoogleApiClient;
@@ -54,15 +54,14 @@ public class MapFragment extends Fragment implements
         mActivity = getActivity();
 
         /**
-         * Get Current User
-         */
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        mUser = auth.getCurrentUser();
-
-        /**
          * Get Database helper for Map Styles
          */
         mMapStyleDBHelper = new MapStyleDBHelper(mActivity);
+
+        /**
+         * Get Database helper for firebase db
+         */
+        mFirebaseDBHelper = new FirebaseDBHelper();
 
         /**
          * Create Google Location Api object
@@ -106,6 +105,9 @@ public class MapFragment extends Fragment implements
             Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (location != null) {
                 mUserLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                mUser = new User(firebaseUser, mUserLocation);
+                markUserOnline(mUser);
                 if (mMap != null) {
                     moveToUserLocation();
                     mMap.setMyLocationEnabled(true);
@@ -131,16 +133,6 @@ public class MapFragment extends Fragment implements
      */
     private void moveToUserLocation() {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, mZoomLevel));
-        dropUserOverlay();
-    }
-
-    /**
-     * Drop marker of users profile image at location
-     */
-    private void dropUserOverlay() {
-        Uri photoUri = mUser.getPhotoUrl();
-        String username = mUser.getDisplayName();
-        UserOverlay userOverlay = new UserOverlay(photoUri, username, mUserLocation, mMap);
     }
 
 
@@ -202,6 +194,19 @@ public class MapFragment extends Fragment implements
         mMap.setMapStyle(new MapStyleOptions(mMapStyleDBHelper.getSelectedStyleJson()));
     }
 
+
+    private void markUserOnline(User user) {
+        if (user != null) {
+            mFirebaseDBHelper.saveUser(user);
+        }
+    }
+
+    private void markUserOffline(User user) {
+        if (user != null) {
+            mFirebaseDBHelper.deleteUser(user);
+        }
+    }
+
     /**
      * Google Api connection suspended
      * @param i
@@ -211,18 +216,19 @@ public class MapFragment extends Fragment implements
 
     }
 
-
     /**
      * Activity LifeCycles
      */
     @Override
     public void onStart() {
+        markUserOnline(mUser);
         mGoogleApiClient.connect();
         super.onStart();
     }
 
     @Override
     public void onStop() {
+        markUserOffline(mUser);
         mGoogleApiClient.disconnect();
         super.onStop();
     }
@@ -248,4 +254,6 @@ public class MapFragment extends Fragment implements
         super.onLowMemory();
         mMapView.onLowMemory();
     }
+
+
 }

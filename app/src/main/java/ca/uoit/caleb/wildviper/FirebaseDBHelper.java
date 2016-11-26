@@ -16,4 +16,12 @@ public class FirebaseDBHelper  {
     public void saveMessage(Message message) {
         mDBRef.child("messages").push().setValue(message);
     }
+
+    public void saveUser(User user) {
+        mDBRef.child("users").child(user.id).setValue(user);
+    }
+
+    public void deleteUser(User user) {
+        mDBRef.child("users").child(user.id).removeValue();
+    }
 }

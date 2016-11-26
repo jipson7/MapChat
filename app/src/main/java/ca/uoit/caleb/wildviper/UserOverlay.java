@@ -18,17 +18,17 @@ import com.google.android.gms.maps.model.LatLng;
 public class UserOverlay implements ProfileImageSetter {
 
     private final Float photoWidth = 100f;
-    private Uri mPhotoUrl;
+    private String mPhotoUrl;
     private String mUsername;
     private LatLng mLatLng;
 
     private GroundOverlay mOverlayHandle;
     private ProfileImageFetcher mProfileImageFetcher;
 
-    public UserOverlay(Uri photoUrl, String username, LatLng latLng, GoogleMap map) {
-        this.mPhotoUrl = photoUrl;
-        this.mUsername = username;
-        this.mLatLng = latLng;
+    public UserOverlay(User user, GoogleMap map) {
+        this.mPhotoUrl = user.photoUrl;
+        this.mUsername = user.username;
+        this.mLatLng = user.getLatLng();
 
         mProfileImageFetcher = new ProfileImageFetcher(this);
 
@@ -42,7 +42,7 @@ public class UserOverlay implements ProfileImageSetter {
                 .position(mLatLng, photoWidth);
         mOverlayHandle = map.addGroundOverlay(userOverlayOptions);
         if (mPhotoUrl != null) {
-            mProfileImageFetcher.execute(mPhotoUrl.toString());
+            mProfileImageFetcher.execute(mPhotoUrl);
         }
     }
 
