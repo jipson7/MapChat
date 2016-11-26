@@ -2,8 +2,12 @@ package ca.uoit.caleb.wildviper;
 
 import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class FirebaseDBHelper  {
@@ -20,6 +24,23 @@ public class FirebaseDBHelper  {
 
     public void deleteSingleMessage(String messageKey) {
         getMessagesReference().child(messageKey).removeValue();
+    }
+
+    public void deleteAllMessages(String userId) {
+        Query userQuery = getMessagesReference().orderByChild("userid").equalTo(userId);
+        userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot message: dataSnapshot.getChildren()) {
+                    message.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                databaseError.toException().printStackTrace();
+            }
+        });
     }
 
     public void setUserListener(UserListener userListener) {

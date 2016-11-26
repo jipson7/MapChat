@@ -13,15 +13,15 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_closed">Closed</string>
     <string name="drawer_map_theme">Map Theme</string>
-    <string name="drawer_delete_messages">Delete My Messages</string>
+    <string name="drawer_delete_messages">Remove My Messages</string>
     <string name="drawer_sign_out">Sign Out</string>
 
     <!-- Map Style Select -->
     <string name="map_style_window_title">Select Map Style</string>
 
     <!-- Write Message Activity -->
-    <string name="write_message_window_title">Drop New Message</string>
-    <string name="write_message_btn_done">Done</string>
+    <string name="write_message_window_title">New Message</string>
+    <string name="write_message_btn_done">Drop</string>
     <string name="write_message_btn_cancel">Cancel</string>
 
 </resources>

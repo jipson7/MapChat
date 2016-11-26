@@ -237,6 +237,7 @@ public class MapFragment extends Fragment implements
 
     @Override
     public void onStop() {
+        markUserOffline(mUser);
         mGoogleApiClient.disconnect();
         super.onStop();
     }
@@ -254,7 +255,6 @@ public class MapFragment extends Fragment implements
 
     @Override
     public void onDestroy() {
-        markUserOffline(mUser);
         mMapView.onDestroy();
         super.onDestroy();
     }

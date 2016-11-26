@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends FragmentActivity{
     private DrawerLayout mDrawerLayout;
@@ -84,7 +85,8 @@ public class MainActivity extends FragmentActivity{
     }
 
     public void deleteMessages(View view) {
-
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        (new FirebaseDBHelper()).deleteAllMessages(userId);
     }
 
     public void signOut(View view) {
