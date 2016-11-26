@@ -3,14 +3,18 @@
 
     <!-- Login -->
     <string name="login_btn_sign_in">Sign In</string>
-    <string name="snackbar_sign_in_cancelled">Sign in was cancelled.</string>
-    <string name="snackbar_no_internet">Unable to sign in without Internet</string>
-    <string name="snackbar_unexpected_error">An Unknown Error Occured</string>
+    <string name="toast_sign_in_cancelled">Sign in was cancelled.</string>
+    <string name="toast_no_internet">Unable to sign in without Internet</string>
+    <string name="toast_unexpected_error">An Unknown Error Occured</string>
+    <string name="toast_signout_success">Signed out successfully.</string>
 
     <!-- Drawer -->
+    <string name="drawer_title">Settings</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_closed">Closed</string>
     <string name="drawer_map_theme">Map Theme</string>
+    <string name="drawer_delete_messages">Delete My Messages</string>
+    <string name="drawer_sign_out">Sign Out</string>
 
     <!-- Map Style Select -->
     <string name="map_style_window_title">Select Map Style</string>

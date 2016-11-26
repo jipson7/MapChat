@@ -28,8 +28,7 @@ public class LoginActivity extends Activity {
 
 
         if (mAuth.getCurrentUser() != null) {
-            //TODO Uncomment this before submitting
-            //launchMainActivity();
+            launchMainActivity();
         }
     }
 
@@ -54,15 +53,15 @@ public class LoginActivity extends Activity {
                 break;
             }
             case RESULT_CANCELED: {
-                showToast(getString(R.string.snackbar_sign_in_cancelled));
+                showToast(getString(R.string.toast_sign_in_cancelled));
                 break;
             }
             case ResultCodes.RESULT_NO_NETWORK: {
-                showToast(getString(R.string.snackbar_no_internet));
+                showToast(getString(R.string.toast_no_internet));
                 break;
             }
             default: {
-                showToast(getString(R.string.snackbar_unexpected_error));
+                showToast(getString(R.string.toast_unexpected_error));
                 break;
             }
         }
