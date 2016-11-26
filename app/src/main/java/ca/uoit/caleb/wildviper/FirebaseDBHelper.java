@@ -16,6 +16,10 @@ public class FirebaseDBHelper  {
         getMessagesReference().addChildEventListener(messageListener);
     }
 
+    public void setUserListener(UserListener userListener) {
+        getUsersReference().addChildEventListener(userListener);
+    }
+
     public void saveMessage(Message message) {
         getMessagesReference().push().setValue(message);
     }

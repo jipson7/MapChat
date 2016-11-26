@@ -28,6 +28,7 @@ public class Message implements ProfileImageSetter {
     public Message() {}
 
     public Message(String username, String photoUrl, String message, Double latitude, Double longitude) {
+
         this.message = message;
         this.photoUrl = photoUrl;
         this.username = username;
