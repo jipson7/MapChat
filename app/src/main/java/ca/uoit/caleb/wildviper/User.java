@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -51,6 +52,13 @@ public class User implements ProfileImageSetter {
     @Exclude
     public void dropOverlay(GoogleMap map) {
         //TODO Add click callback to user overlay to display user information
+
+        String loggedInId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        if (loggedInId == id) {
+            //Don't drop overlay for current user, just other users.
+            return;
+        }
 
         ProfileImageFetcher profileImageFetcher = new ProfileImageFetcher(this);
 
