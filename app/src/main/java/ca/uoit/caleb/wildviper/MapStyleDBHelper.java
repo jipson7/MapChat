@@ -41,6 +41,10 @@ public class MapStyleDBHelper extends SQLiteOpenHelper {
         /**
          * Populate with styles from resource files
          */
+        String classicStyle = context.getResources().getString(R.string.map_style_classic);
+        addMapStyle(db, "Classic", classicStyle, 0);
+        String classicStyleLabels = context.getResources().getString(R.string.map_style_classic_labels);
+        addMapStyle(db, "Classic - Labels", classicStyleLabels, 0);
         String dayStyle = context.getResources().getString(R.string.map_style_day);
         addMapStyle(db, "Day", dayStyle, 0);
         String nightStyle = context.getResources().getString(R.string.map_style_night);

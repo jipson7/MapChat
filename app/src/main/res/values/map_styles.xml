@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="map_style_classic_labels" type="string">[]</item>
+    <item name="map_style_classic" type="string">
+        [
+        {
+        \"elementType\": \"labels\",
+        \"stylers\": [
+        {
+        \"visibility\": \"off\"
+        }
+        ]
+        }
+        ]
+    </item>
     <item name="map_style_day" type="string">
       [
       {
