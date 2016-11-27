@@ -15,7 +15,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -30,7 +33,8 @@ public class MapFragment extends Fragment implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleMap.OnMapLongClickListener,
-        GoogleMap.OnInfoWindowLongClickListener {
+        GoogleMap.OnInfoWindowLongClickListener,
+        PlaceSelectionListener {
 
     private static final int RC_PERMISSION_REQUEST = 1231;
 
@@ -109,7 +113,7 @@ public class MapFragment extends Fragment implements
                 mUser = new User(firebaseUser, mUserLocation);
                 markUserOnline(mUser);
                 if (mMap != null) {
-                    moveToUserLocation();
+                    moveToLocation(mUserLocation);
                     mMap.setMyLocationEnabled(true);
                 }
             }
@@ -131,8 +135,8 @@ public class MapFragment extends Fragment implements
     /**
      * Center map around location
      */
-    private void moveToUserLocation() {
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, mZoomLevel));
+    private void moveToLocation(LatLng location) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, mZoomLevel));
     }
 
 
@@ -151,7 +155,7 @@ public class MapFragment extends Fragment implements
                     setUserLocation();
                 } else {
                     Toast.makeText(mActivity, "Moving to default location.", Toast.LENGTH_LONG).show();
-                    moveToUserLocation();
+                    moveToLocation(mUserLocation);
                 }
                 return;
             }
@@ -168,7 +172,7 @@ public class MapFragment extends Fragment implements
         mMap = googleMap;
         setMapStyle();
         mMap.getUiSettings().setMapToolbarEnabled(false);
-        moveToUserLocation();
+        moveToLocation(mUserLocation);
         mMessageListener = new MessageListener(mMap);
         mFirebaseDBHelper.setMessageListener(mMessageListener);
         mFirebaseDBHelper.setUserListener(new UserListener(mMap));
@@ -189,7 +193,10 @@ public class MapFragment extends Fragment implements
         mActivity.startActivity(i);
     }
 
-
+    /**
+     * Info Window long click to delete message
+     * @param marker
+     */
     @Override
     public void onInfoWindowLongClick(Marker marker) {
         String userId = mUser.id;
@@ -199,6 +206,24 @@ public class MapFragment extends Fragment implements
         } else {
             Toast.makeText(mActivity, getString(R.string.map_fragment_toast_delete_error), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Search callback for places search
+     * @param place
+     */
+    @Override
+    public void onPlaceSelected(Place place) {
+        moveToLocation(place.getLatLng());
+    }
+
+    /**
+     * Error on places search callback
+     * @param status
+     */
+    @Override
+    public void onError(Status status) {
+
     }
 
     /**
@@ -268,5 +293,4 @@ public class MapFragment extends Fragment implements
         super.onLowMemory();
         mMapView.onLowMemory();
     }
-
 }
