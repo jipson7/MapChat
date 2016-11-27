@@ -55,7 +55,7 @@ public class User implements ProfileImageSetter {
 
         String loggedInId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        if (loggedInId == id) {
+        if (loggedInId.equals(id)) {
             //Don't drop overlay for current user, just other users.
             return;
         }
