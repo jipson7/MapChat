@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Wild Viper</string>
+    <string name="app_name">Map Chat</string>
 
     <!-- Login -->
     <string name="login_btn_sign_in">Sign In</string>
