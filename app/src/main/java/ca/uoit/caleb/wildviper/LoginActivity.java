@@ -36,8 +36,10 @@ public class LoginActivity extends Activity {
     public void launchSignInIntent(View view) {
         Intent i = AuthUI.getInstance()
                 .createSignInIntentBuilder()
-                .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-                .setIsSmartLockEnabled(false)
+                .setProviders(Arrays.asList(
+                        new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build(),
+                        new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()
+                )).setIsSmartLockEnabled(false)
                 .build();
         startActivityForResult(i, RC_SIGN_IN);
     }
