@@ -105,6 +105,8 @@ public class User implements ProfileImageSetter {
 
     @Exclude
     public void remove() {
-        this.mOverlayHandle.remove();
+        if (this.mOverlayHandle != null) {
+            this.mOverlayHandle.remove();
+        }
     }
 }

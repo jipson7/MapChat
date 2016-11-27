@@ -30,5 +30,6 @@
     <string name="write_message_window_title">New Message</string>
     <string name="write_message_btn_done">Drop</string>
     <string name="write_message_btn_cancel">Cancel</string>
+    <string name="toast_error_message_empty">Cannot drop an empty message.</string>
 
 </resources>

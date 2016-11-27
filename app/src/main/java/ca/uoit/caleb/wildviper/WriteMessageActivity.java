@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,6 +27,12 @@ public class WriteMessageActivity extends Activity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         EditText messageView = (EditText) findViewById(R.id.write_message_txt);
         String messageText = messageView.getText().toString();
+
+        if (messageText.trim().isEmpty()) {
+            Toast.makeText(this, R.string.toast_error_message_empty, Toast.LENGTH_LONG).show();
+            return;
+        }
+
         Intent intent = getIntent();
 
         Uri photoUrl = user.getPhotoUrl();

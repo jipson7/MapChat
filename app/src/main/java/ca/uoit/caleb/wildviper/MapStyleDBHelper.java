@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class MapStyleDBHelper extends SQLiteOpenHelper {
 
-    private static final String FILENAME = "map_style_storage.db";
+    private static final String FILENAME = "map_style_storage_01.db";
 
     private static final int VERSION = 1;
 
