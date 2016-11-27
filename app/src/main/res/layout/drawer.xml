@@ -6,10 +6,10 @@
 
     <Button
         android:layout_margin="10dp"
-        android:text="@string/drawer_map_theme"
+        android:text="@string/drawer_go_to_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="selectMapTheme"/>
+        android:onClick="goToLocation"/>
 
     <Button
         android:layout_margin="10dp"
@@ -20,8 +20,22 @@
 
     <Button
         android:layout_margin="10dp"
+        android:text="@string/drawer_map_theme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="selectMapTheme"/>
+
+    <Button
+        android:layout_margin="10dp"
         android:text="@string/drawer_sign_out"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="signOut"/>
+
+    <Button
+        android:layout_margin="10dp"
+        android:text="@string/drawer_delete_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="deleteAccount"/>
 </LinearLayout>

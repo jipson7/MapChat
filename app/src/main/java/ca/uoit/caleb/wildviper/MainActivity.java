@@ -78,6 +78,10 @@ public class MainActivity extends FragmentActivity{
         return super.onOptionsItemSelected(item);
     }
 
+    public void goToLocation(View view) {
+
+    }
+
     public void selectMapTheme(View view) {
         Intent i = new Intent(this, MapThemeSelectActivity.class);
         startActivity(i);
@@ -86,6 +90,10 @@ public class MainActivity extends FragmentActivity{
 
     public void deleteMessages(View view) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        deleteAllMessages(userId);
+    }
+
+    private void deleteAllMessages(String userId) {
         (new FirebaseDBHelper()).deleteAllMessages(userId);
         mDrawerLayout.closeDrawers();
     }
@@ -95,10 +103,36 @@ public class MainActivity extends FragmentActivity{
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(MainActivity.this, getString(R.string.toast_signout_success), Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                        finish();
+                        showToast(getString(R.string.toast_signout_success));
+                        returnToLogin();
                     }
                 });
+    }
+
+    public void deleteAccount(View view) {
+        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        AuthUI.getInstance()
+                .delete(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            deleteAllMessages(userId);
+                            showToast(getString(R.string.toast_delete_success));
+                            returnToLogin();
+                        } else {
+                            showToast(getString(R.string.toast_delete_failed));
+                        }
+                    }
+                });
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+    }
+
+    private void returnToLogin() {
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        finish();
     }
 }

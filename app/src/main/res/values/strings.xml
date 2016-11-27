@@ -7,14 +7,18 @@
     <string name="toast_no_internet">Unable to sign in without Internet</string>
     <string name="toast_unexpected_error">An Unknown Error Occured</string>
     <string name="toast_signout_success">Signed out successfully.</string>
+    <string name="toast_delete_success">Account deleted successfully.</string>
+    <string name="toast_delete_failed">Failed to delete account.</string>
 
     <!-- Drawer -->
     <string name="drawer_title">Settings</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_closed">Closed</string>
+    <string name="drawer_go_to_location">Go To Location</string>
     <string name="drawer_map_theme">Map Theme</string>
     <string name="drawer_delete_messages">Remove My Messages</string>
     <string name="drawer_sign_out">Sign Out</string>
+    <string name="drawer_delete_account">Delete Account</string>
 
     <!-- Map Fragment -->
     <string name="map_fragment_toast_delete_error">Cannot delete another user\'s message.</string>
