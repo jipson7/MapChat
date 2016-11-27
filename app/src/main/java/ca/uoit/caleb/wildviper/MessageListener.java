@@ -1,10 +1,7 @@
 package ca.uoit.caleb.wildviper;
 
 
-import android.util.Log;
-
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

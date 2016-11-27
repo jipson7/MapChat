@@ -38,7 +38,7 @@ public class Message implements ProfileImageSetter {
     }
 
     @Exclude
-    public Marker dropMarker(GoogleMap map) {
+    public void dropMarker(GoogleMap map) {
         MarkerOptions options = new MarkerOptions().position(getLatLng()).title(username).snippet(message);
         mMarkerHandle = map.addMarker(options);
         mMarkerHandle.showInfoWindow();
@@ -46,7 +46,6 @@ public class Message implements ProfileImageSetter {
             ProfileImageFetcher mProfileImageFetcher = new ProfileImageFetcher(this);
             mProfileImageFetcher.execute(photoUrl);
         }
-        return mMarkerHandle;
     }
 
     @Exclude
