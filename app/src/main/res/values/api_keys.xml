@@ -6,4 +6,7 @@
     <string name="google_geo_key" templateMergeStrategy="preserve" translatable="false">
         AIzaSyCxJSQbu00E0w-DPNDclTG3uWVaUdjrBFk
     </string>
+
+    <string name="twitter_consumer_key" translatable="false">4ilbaOG66kOCNPsvFyw03sTbh</string>
+    <string name="twitter_consumer_secret" translatable="false">ketEgiHbED8gSitBedFslg5s6Rh6IlQbrw64blqAa9gstdqF7J</string>
 </resources>
