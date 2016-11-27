@@ -13,14 +13,18 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements PlaceSelectionListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+    private MapFragment mMapFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,15 +59,36 @@ public class MainActivity extends FragmentActivity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
-        attachMapFragmentAsPlacesListener();
+        mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.main_map_fragment);
+
+        attachPlacesListener();
     }
 
-    private void attachMapFragmentAsPlacesListener() {
-        MapFragment mapInstance = (MapFragment) getFragmentManager().findFragmentById(R.id.main_map_fragment);
+    private void attachPlacesListener() {
+
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
-        autocompleteFragment.setOnPlaceSelectedListener(mapInstance);
+        autocompleteFragment.setOnPlaceSelectedListener(this);
+    }
+
+    /**
+     * Search callback for places search
+     * @param place
+     */
+    @Override
+    public void onPlaceSelected(Place place) {
+        mMapFragment.moveToLocation(place.getLatLng());
+        mDrawerLayout.closeDrawers();
+    }
+
+    /**
+     * Error on places search callback
+     * @param status
+     */
+    @Override
+    public void onError(Status status) {
+
     }
 
     @Override

@@ -33,8 +33,7 @@ public class MapFragment extends Fragment implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleMap.OnMapLongClickListener,
-        GoogleMap.OnInfoWindowLongClickListener,
-        PlaceSelectionListener {
+        GoogleMap.OnInfoWindowLongClickListener {
 
     private static final int RC_PERMISSION_REQUEST = 1231;
 
@@ -135,7 +134,7 @@ public class MapFragment extends Fragment implements
     /**
      * Center map around location
      */
-    private void moveToLocation(LatLng location) {
+    public void moveToLocation(LatLng location) {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, mZoomLevel));
     }
 
@@ -206,24 +205,6 @@ public class MapFragment extends Fragment implements
         } else {
             Toast.makeText(mActivity, getString(R.string.map_fragment_toast_delete_error), Toast.LENGTH_SHORT).show();
         }
-    }
-
-    /**
-     * Search callback for places search
-     * @param place
-     */
-    @Override
-    public void onPlaceSelected(Place place) {
-        moveToLocation(place.getLatLng());
-    }
-
-    /**
-     * Error on places search callback
-     * @param status
-     */
-    @Override
-    public void onError(Status status) {
-
     }
 
     /**
