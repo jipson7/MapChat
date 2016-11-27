@@ -4,6 +4,11 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+    <TextView
+        android:text="@string/drawer_go_to_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <fragment
         android:id="@+id/place_autocomplete_fragment"
         android:layout_width="match_parent"
@@ -32,9 +37,13 @@
         android:onClick="signOut"/>
 
     <Button
-        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="40dp"
         android:text="@string/drawer_delete_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="deleteAccount"/>
+        android:onClick="deleteAccount"
+        style="?android:attr/borderlessButtonStyle"/>
+
 </LinearLayout>
