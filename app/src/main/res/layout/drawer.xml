@@ -4,12 +4,11 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <Button
-        android:layout_margin="10dp"
-        android:text="@string/drawer_go_to_location"
+    <fragment
+        android:id="@+id/place_autocomplete_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="goToLocation"/>
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"/>
 
     <Button
         android:layout_margin="10dp"

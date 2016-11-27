@@ -78,10 +78,6 @@ public class MainActivity extends FragmentActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    public void goToLocation(View view) {
-
-    }
-
     public void selectMapTheme(View view) {
         Intent i = new Intent(this, MapThemeSelectActivity.class);
         startActivity(i);
