@@ -1,6 +1,8 @@
 package ca.uoit.caleb.wildviper;
 
 
+import android.content.Context;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -17,10 +19,12 @@ public class MessageListener implements ChildEventListener{
 
     private GoogleMap mMapReference;
     private HashMap<String, Message> mMessages;
+    private NotificationPlayer mNotificationPlayer;
 
-    public MessageListener(GoogleMap map) {
+    public MessageListener(GoogleMap map, Context context) {
         this.mMapReference = map;
         mMessages = new HashMap<>();
+        mNotificationPlayer = new NotificationPlayer(context);
     }
 
 
@@ -45,6 +49,7 @@ public class MessageListener implements ChildEventListener{
         Message message = dataSnapshot.getValue(Message.class);
         message.dropMarker(mMapReference);
         mMessages.put(dataSnapshot.getKey(), message);
+        mNotificationPlayer.messageAdded();
     }
 
     @Override
@@ -56,6 +61,7 @@ public class MessageListener implements ChildEventListener{
         Message message = mMessages.get(dataSnapshot.getKey());
         message.remove();
         mMessages.remove(dataSnapshot.getKey());
+        mNotificationPlayer.messageRemoved();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package ca.uoit.caleb.wildviper;
 
+import android.content.Context;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -14,12 +16,14 @@ import java.util.HashMap;
 public class UserListener implements ChildEventListener {
 
     private GoogleMap mMapReference;
-
     private HashMap<String, User> mUsers;
 
-    public UserListener(GoogleMap mapReference) {
+    private NotificationPlayer mNotificationPlayer;
+
+    public UserListener(GoogleMap mapReference, Context context) {
         this.mMapReference = mapReference;
         mUsers = new HashMap<>();
+        mNotificationPlayer = new NotificationPlayer(context);
     }
 
     @Override
@@ -27,6 +31,7 @@ public class UserListener implements ChildEventListener {
         User user = dataSnapshot.getValue(User.class);
         user.dropOverlay(mMapReference);
         mUsers.put(user.id, user);
+        mNotificationPlayer.userAdded();
     }
 
     @Override
@@ -40,6 +45,7 @@ public class UserListener implements ChildEventListener {
         User user = mUsers.get(userId);
         user.remove();
         mUsers.remove(userId);
+        mNotificationPlayer.userRemoved();
     }
 
     @Override
