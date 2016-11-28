@@ -41,6 +41,7 @@ public class Message implements ProfileImageSetter {
     public void dropMarker(GoogleMap map) {
         MarkerOptions options = new MarkerOptions().position(getLatLng()).title(username).snippet(message);
         mMarkerHandle = map.addMarker(options);
+        mMarkerHandle.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.default_message_icon));
         mMarkerHandle.showInfoWindow();
         if (photoUrl != null) {
             ProfileImageFetcher mProfileImageFetcher = new ProfileImageFetcher(this);
