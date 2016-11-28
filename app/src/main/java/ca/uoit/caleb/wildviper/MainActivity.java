@@ -142,14 +142,15 @@ public class MainActivity extends FragmentActivity implements PlaceSelectionList
     }
 
     public void deleteAccount(View view) {
-        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        deleteAllMessages(userId);
+        mMapFragment.markUserOffline(userId);
         AuthUI.getInstance()
                 .delete(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            deleteAllMessages(userId);
                             showToast(getString(R.string.toast_delete_success));
                             returnToLogin();
                         } else {

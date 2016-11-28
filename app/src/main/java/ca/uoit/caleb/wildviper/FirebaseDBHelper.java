@@ -53,8 +53,8 @@ public class FirebaseDBHelper  {
         getUsersReference().child(user.id).setValue(user);
     }
 
-    public void deleteUser(User user) {
-        getUsersReference().child(user.id).removeValue();
+    public void deleteUser(String userId) {
+        getUsersReference().child(userId).removeValue();
     }
 
     private DatabaseReference getMessagesReference() {

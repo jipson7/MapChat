@@ -15,10 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -221,10 +218,9 @@ public class MapFragment extends Fragment implements
         }
     }
 
-    private void markUserOffline(User user) {
-        if (user != null) {
-            mFirebaseDBHelper.deleteUser(user);
-        }
+    public void markUserOffline(String userId) {
+        mUser = null;
+        mFirebaseDBHelper.deleteUser(userId);
     }
 
     /**
@@ -247,7 +243,9 @@ public class MapFragment extends Fragment implements
 
     @Override
     public void onStop() {
-        markUserOffline(mUser);
+        if (mUser != null) {
+            markUserOffline(mUser.id);
+        }
         mGoogleApiClient.disconnect();
         super.onStop();
     }
