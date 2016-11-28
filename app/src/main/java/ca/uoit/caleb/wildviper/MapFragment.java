@@ -174,7 +174,7 @@ public class MapFragment extends Fragment implements
         mFirebaseDBHelper.setUserListener(new UserListener(mMap, mActivity));
         mMap.setOnMapLongClickListener(this);
         mMap.setOnInfoWindowLongClickListener(this);
-        mMap.setInfoWindowAdapter(new MessageWindowAdapter(mActivity));
+        mMap.setInfoWindowAdapter(new MessageWindowAdapter(mActivity, mMessageListener));
     }
 
     /**

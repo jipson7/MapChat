@@ -13,6 +13,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.Exclude;
@@ -31,8 +33,7 @@ public class User implements ProfileImageSetter {
     public double latitude;
     public double longitude;
 
-    private final Float photoWidth = 100f;
-    private GroundOverlay mOverlayHandle;
+    private Marker mMarkerHandle;
 
     public User() {}
 
@@ -50,25 +51,25 @@ public class User implements ProfileImageSetter {
     }
 
     @Exclude
-    public void dropOverlay(GoogleMap map) {
+    public void dropMarker(GoogleMap map) {
         //TODO Add click callback to user overlay to display user information
 
         String loggedInId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         if (loggedInId.equals(id)) {
-            //Don't drop overlay for current user, just other users.
             return;
         }
 
-        ProfileImageFetcher profileImageFetcher = new ProfileImageFetcher(this);
+        String title = "User: " + username;
 
-        GroundOverlayOptions userOverlayOptions = new GroundOverlayOptions()
-                .image(BitmapDescriptorFactory.fromResource(R.drawable.default_user_icon))
-                .anchor(0, 1)
-                .position(getLatLng(), photoWidth);
-        mOverlayHandle = map.addGroundOverlay(userOverlayOptions);
+        MarkerOptions options = new MarkerOptions().position(getLatLng()).title(title);
+
+        mMarkerHandle = map.addMarker(options);
+        mMarkerHandle.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.default_user_icon));
+        mMarkerHandle.showInfoWindow();
         if (photoUrl != null) {
-            profileImageFetcher.execute(photoUrl);
+            ProfileImageFetcher mProfileImageFetcher = new ProfileImageFetcher(this);
+            mProfileImageFetcher.execute(photoUrl);
         }
     }
 
@@ -81,7 +82,7 @@ public class User implements ProfileImageSetter {
     @Override
     public void setProfileImage(Bitmap bitmap) {
         Bitmap circleBitmap = cropCircleBitmap(bitmap);
-        mOverlayHandle.setImage(BitmapDescriptorFactory.fromBitmap(circleBitmap));
+        mMarkerHandle.setIcon(BitmapDescriptorFactory.fromBitmap(circleBitmap));
     }
 
     private Bitmap cropCircleBitmap(Bitmap bitmap) {
@@ -105,8 +106,8 @@ public class User implements ProfileImageSetter {
 
     @Exclude
     public void remove() {
-        if (this.mOverlayHandle != null) {
-            this.mOverlayHandle.remove();
+        if (this.mMarkerHandle != null) {
+            this.mMarkerHandle.remove();
         }
     }
 }

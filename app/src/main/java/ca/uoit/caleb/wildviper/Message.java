@@ -50,8 +50,8 @@ public class Message implements ProfileImageSetter {
     }
 
     @Exclude
-    public String getMarkerId() {
-        return mMarkerHandle.getId();
+    public Marker getMarker() {
+        return mMarkerHandle;
     }
 
     private LatLng getLatLng() {
@@ -65,7 +65,7 @@ public class Message implements ProfileImageSetter {
     }
 
     @Exclude
-    public void remove() {
-        mMarkerHandle.remove();
+    public void remove(){
+        this.mMarkerHandle.remove();
     }
 }

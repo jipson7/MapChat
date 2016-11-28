@@ -4,6 +4,7 @@ package ca.uoit.caleb.wildviper;
 import android.content.Context;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,12 +28,23 @@ public class MessageListener implements ChildEventListener{
         mNotificationPlayer = new NotificationPlayer(context);
     }
 
+    public boolean isMessageMarker(Marker marker) {
+        boolean result = false;
+        for (Map.Entry<String, Message> entry : mMessages.entrySet()) {
+            Message message = entry.getValue();
+            if (message.getMarker().getId().equals(marker.getId())) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
 
     public String getMessageKey(String markerId, String userId) {
         String messageKey = null;
         for (Map.Entry<String, Message> entry : mMessages.entrySet()) {
             Message message = entry.getValue();
-            if (message.getMarkerId().equals(markerId) && message.userid.equals(userId)) {
+            if (message.getMarker().getId().equals(markerId) && message.userid.equals(userId)) {
                 messageKey = entry.getKey();
             }
         }

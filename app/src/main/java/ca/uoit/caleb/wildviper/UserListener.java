@@ -29,7 +29,7 @@ public class UserListener implements ChildEventListener {
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
         User user = dataSnapshot.getValue(User.class);
-        user.dropOverlay(mMapReference);
+        user.dropMarker(mMapReference);
         mUsers.put(user.id, user);
         mNotificationPlayer.userAdded();
     }
