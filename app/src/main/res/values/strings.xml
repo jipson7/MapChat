@@ -21,6 +21,8 @@
     <string name="drawer_delete_account">Delete Account</string>
     <string name="drawer_delete_dialog_title">Delete Account</string>
     <string name="drawer_delete_dialog_message">This will delete your account and any messages that you\'ve dropped.</string>
+    <string name="drawer_delete_messages_title">Are you sure?</string>
+    <string name="drawer_delete_messages_message">This will delete all messages that you\'ve dropped.</string>
 
     <!-- Map Fragment -->
     <string name="map_fragment_toast_delete_error">Cannot delete another user\'s message.</string>

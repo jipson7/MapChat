@@ -122,12 +122,18 @@ public class MainActivity extends FragmentActivity implements PlaceSelectionList
         mDrawerLayout.closeDrawers();
     }
 
-    public void deleteMessages(View view) {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        deleteAllMessages(userId);
+    public void confirmDeleteMessages(View view) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.drawer_delete_messages_title)
+                .setMessage(R.string.drawer_delete_messages_message)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        deleteAllMessages();
+                    }}).setNegativeButton(R.string.no, null).show();
     }
 
-    private void deleteAllMessages(String userId) {
+    private void deleteAllMessages() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         (new FirebaseDBHelper()).deleteAllMessages(userId);
         mDrawerLayout.closeDrawers();
     }
@@ -159,7 +165,7 @@ public class MainActivity extends FragmentActivity implements PlaceSelectionList
     private void deleteAccount() {
         mMapFragment.removeListeners();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        deleteAllMessages(userId);
+        deleteAllMessages();
         mMapFragment.markUserOffline(userId);
         AuthUI.getInstance()
                 .delete(this)
