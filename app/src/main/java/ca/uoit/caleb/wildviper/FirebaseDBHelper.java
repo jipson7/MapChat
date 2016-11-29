@@ -1,5 +1,7 @@
 package ca.uoit.caleb.wildviper;
 
+import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,6 +53,11 @@ public class FirebaseDBHelper  {
 
     public void saveUser(User user) {
         getUsersReference().child(user.id).setValue(user);
+    }
+
+    public void updateUserLocation(User user, Double latitude, Double longitude) {
+        getUsersReference().child(user.id).child("latitude").setValue(latitude);
+        getUsersReference().child(user.id).child("longitude").setValue(longitude);
     }
 
     public void deleteUser(String userId) {

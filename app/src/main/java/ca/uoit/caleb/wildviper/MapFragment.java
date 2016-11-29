@@ -9,12 +9,15 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v13.app.FragmentCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,7 +33,8 @@ public class MapFragment extends Fragment implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleMap.OnMapLongClickListener,
-        GoogleMap.OnInfoWindowLongClickListener {
+        GoogleMap.OnInfoWindowLongClickListener,
+        LocationListener {
 
     private static final int RC_PERMISSION_REQUEST = 1231;
 
@@ -45,6 +49,7 @@ public class MapFragment extends Fragment implements
     private MapView mMapView;
     private Activity mActivity;
     private LatLng mUserLocation;
+    private LocationRequest mLocationRequest;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -108,6 +113,8 @@ public class MapFragment extends Fragment implements
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 mUser = new User(firebaseUser, mUserLocation);
                 markUserOnline(mUser);
+                mLocationRequest = createLocationRequest();
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
                 if (mMap != null) {
                     moveToLocation(mUserLocation);
                     mMap.setMyLocationEnabled(true);
@@ -116,6 +123,14 @@ public class MapFragment extends Fragment implements
         } else {
             requestLocationPermissions();
         }
+    }
+
+    private LocationRequest createLocationRequest() {
+        LocationRequest lr = new LocationRequest();
+        lr.setInterval(10000);
+        lr.setFastestInterval(5000);
+        lr.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        return lr;
     }
 
     /**
@@ -156,6 +171,16 @@ public class MapFragment extends Fragment implements
                 return;
             }
         }
+    }
+
+
+    /**
+     * Updated on Location change
+     * @param l
+     */
+    @Override
+    public void onLocationChanged(Location l) {
+        mFirebaseDBHelper.updateUserLocation(mUser, l.getLatitude(), l.getLongitude());
     }
 
 

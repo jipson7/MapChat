@@ -52,25 +52,18 @@ public class User implements ProfileImageSetter {
 
     @Exclude
     public void dropMarker(GoogleMap map) {
-        //TODO Add click callback to user overlay to display user information
-
-        String loggedInId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        if (loggedInId.equals(id)) {
-            return;
-        }
-
         String title = "User: " + username;
 
         MarkerOptions options = new MarkerOptions().position(getLatLng()).title(title);
 
         mMarkerHandle = map.addMarker(options);
         mMarkerHandle.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.default_user_icon));
-        mMarkerHandle.showInfoWindow();
+
         if (photoUrl != null) {
             ProfileImageFetcher mProfileImageFetcher = new ProfileImageFetcher(this);
             mProfileImageFetcher.execute(photoUrl);
         }
+
     }
 
     @Exclude
@@ -109,5 +102,12 @@ public class User implements ProfileImageSetter {
         if (this.mMarkerHandle != null) {
             this.mMarkerHandle.remove();
         }
+    }
+
+    @Exclude
+    public void moveMarker(Double latitude, Double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        mMarkerHandle.setPosition(getLatLng());
     }
 }
