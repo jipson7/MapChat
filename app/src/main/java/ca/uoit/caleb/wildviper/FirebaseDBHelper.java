@@ -13,12 +13,15 @@ import com.google.firebase.database.ValueEventListener;
 public class FirebaseDBHelper  {
 
     private DatabaseReference mDBRef;
+    private UserListener mUserListener;
+    private MessageListener mMessageListener;
 
     FirebaseDBHelper() {
         this.mDBRef = FirebaseDatabase.getInstance().getReference();
     }
 
     public void setMessageListener(MessageListener messageListener) {
+        mMessageListener = messageListener;
         getMessagesReference().addChildEventListener(messageListener);
     }
 
@@ -44,6 +47,7 @@ public class FirebaseDBHelper  {
     }
 
     public void setUserListener(UserListener userListener) {
+        mUserListener = userListener;
         getUsersReference().addChildEventListener(userListener);
     }
 
@@ -70,5 +74,10 @@ public class FirebaseDBHelper  {
 
     private DatabaseReference getUsersReference() {
         return mDBRef.child("users");
+    }
+
+    public void removeListeners() {
+        getUsersReference().removeEventListener(mUserListener);
+        getMessagesReference().removeEventListener(mMessageListener);
     }
 }

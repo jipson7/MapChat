@@ -131,6 +131,7 @@ public class MainActivity extends FragmentActivity implements PlaceSelectionList
     }
 
     public void signOut(View view) {
+        mMapFragment.removeListeners();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         mMapFragment.markUserOffline(userId);
         AuthUI.getInstance()
@@ -144,6 +145,7 @@ public class MainActivity extends FragmentActivity implements PlaceSelectionList
     }
 
     public void deleteAccount(View view) {
+        mMapFragment.removeListeners();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         deleteAllMessages(userId);
         mMapFragment.markUserOffline(userId);

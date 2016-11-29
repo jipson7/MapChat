@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -65,12 +66,13 @@ public class UserListener implements ChildEventListener {
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
-        String loggedInId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
 
 
         String userId = dataSnapshot.getValue(User.class).id;
 
-        if (userId.equals(loggedInId)) {
+        if (fbUser != null && userId.equals(fbUser.getUid())) {
             return;
         }
 
