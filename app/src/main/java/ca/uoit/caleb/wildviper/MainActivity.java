@@ -131,6 +131,8 @@ public class MainActivity extends FragmentActivity implements PlaceSelectionList
     }
 
     public void signOut(View view) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mMapFragment.markUserOffline(userId);
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
