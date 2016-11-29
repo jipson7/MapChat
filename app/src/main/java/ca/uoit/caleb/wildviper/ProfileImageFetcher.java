@@ -19,6 +19,7 @@ public class ProfileImageFetcher extends AsyncTask {
     private ProfileImageSetter mProfileImageSetter;
 
     private Exception e;
+    private Bitmap mCachedBitmap;
 
     public ProfileImageFetcher(ProfileImageSetter profileImageSetter) {
         mProfileImageSetter = profileImageSetter;
@@ -26,6 +27,9 @@ public class ProfileImageFetcher extends AsyncTask {
 
     @Override
     protected Object doInBackground(Object[] objects) {
+        if (mCachedBitmap != null) {
+            return mCachedBitmap;
+        }
         Bitmap profilePhoto = null;
         String photoUrlString = (String) objects[0];
         try {
@@ -47,11 +51,15 @@ public class ProfileImageFetcher extends AsyncTask {
     @Override
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
+        if (e != null) {
+            e.printStackTrace();
+            return;
+        }
         if (o != null) {
             Bitmap profilePhoto = (Bitmap) o;
+            mCachedBitmap = profilePhoto;
             mProfileImageSetter.setProfileImage(profilePhoto);
         }
     }
-
 
 }

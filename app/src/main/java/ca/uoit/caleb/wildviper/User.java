@@ -34,6 +34,7 @@ public class User implements ProfileImageSetter {
     public double longitude;
 
     private Marker mMarkerHandle;
+    private ProfileImageFetcher mProfileImageFetcher = new ProfileImageFetcher(this);
 
     public User() {}
 
@@ -60,7 +61,6 @@ public class User implements ProfileImageSetter {
         mMarkerHandle.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.default_user_icon));
 
         if (photoUrl != null) {
-            ProfileImageFetcher mProfileImageFetcher = new ProfileImageFetcher(this);
             mProfileImageFetcher.execute(photoUrl);
         }
 

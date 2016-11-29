@@ -25,6 +25,7 @@ public class Message implements ProfileImageSetter {
     public double longitude;
 
     private Marker mMarkerHandle;
+    private ProfileImageFetcher mProfileImageFetcher = new ProfileImageFetcher(this);
 
     public Message() {}
 
@@ -43,7 +44,6 @@ public class Message implements ProfileImageSetter {
         mMarkerHandle = map.addMarker(options);
         mMarkerHandle.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.default_message_icon));
         if (photoUrl != null) {
-            ProfileImageFetcher mProfileImageFetcher = new ProfileImageFetcher(this);
             mProfileImageFetcher.execute(photoUrl);
         } else {
             mMarkerHandle.showInfoWindow();
