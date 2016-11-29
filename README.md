@@ -1,4 +1,8 @@
 #Map Chat
+
+##To Randy
+So basically this is a chatting app, and any functionality depends on multiple users. If you have multiple google accounts, that is how I've been testing it. However if you are testing this and don't have access to another account. Send me a slack message or email and I can log on to test it out with you. I will also drop some messages around the school before I submit it just so there is something there.
+
 ##Overview
 A location based chat application. Login and hold the map to drop a message and see messages from other users instanstly, anywhere.
 
@@ -8,9 +12,9 @@ Click Sign-in on the main login screen to begin the sign in process. The app use
 ##Main Screen
 Upon loading the main screen the application will request location permissions. If the permissions are granted, the application will center on the users current location, otherwise it will move to the default location.
 
-Logging in will immediately notify other users by dropping a small round layover of your profile image near your location. If you choose not to provide your location then other users will not be notified of your logging in or out. You will also see small round layovers of other users who log into the application in the area you are viewing, which will then be removed if they log out.
+Logging in will immediately notify other users by dropping a small round layover of your profile image near your location. If you choose not to provide your location then other users will not be notified of your logging in or out. You will also see small round layovers of other users who log into the application in the area you are viewing, which will then be removed if they log out. The layovers move with the users.
 
-Messages are added by click and holding anywhere on the map, which will bring up a dialog for you to enter your message. Messages can be multi-line but have a 140-Character limit. Messages are displayed as small squares on the map containing either the creating user's profile image, or the default image of an envelope. Click any of these squares to display the message contents. To delete a message, long click on the message contents (the text itself). You are not able to delete another user's message.
+Messages are added by clicking and holding anywhere on the map, which will bring up a dialog for you to enter your message. Messages can be multi-line but have a 140-Character limit. Messages are displayed as small squares on the map containing either the creating user's profile image, or the default image of an envelope. Click any of these squares to display the message contents. To delete a message, long click on the message contents (the text itself). You are not able to delete another user's message.
 
 Messages created by you or other users are immediately available to all users currently connected to and using the application.
 
