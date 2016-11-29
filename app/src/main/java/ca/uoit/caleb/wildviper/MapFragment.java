@@ -293,6 +293,7 @@ public class MapFragment extends Fragment implements
 
     @Override
     public void onDestroy() {
+        removeListeners();
         mMapView.onDestroy();
         super.onDestroy();
     }

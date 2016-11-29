@@ -1,6 +1,7 @@
 package ca.uoit.caleb.wildviper;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.app.AlertDialog;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -144,7 +146,17 @@ public class MainActivity extends FragmentActivity implements PlaceSelectionList
                 });
     }
 
-    public void deleteAccount(View view) {
+    public void confirmDelete(View view) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.drawer_delete_dialog_title)
+                .setMessage(R.string.drawer_delete_dialog_message)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        deleteAccount();
+                    }}).setNegativeButton(R.string.no, null).show();
+    }
+
+    private void deleteAccount() {
         mMapFragment.removeListeners();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         deleteAllMessages(userId);

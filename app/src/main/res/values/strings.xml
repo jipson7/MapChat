@@ -19,6 +19,8 @@
     <string name="drawer_delete_messages">Remove My Messages</string>
     <string name="drawer_sign_out">Sign Out</string>
     <string name="drawer_delete_account">Delete Account</string>
+    <string name="drawer_delete_dialog_title">Delete Account</string>
+    <string name="drawer_delete_dialog_message">This will delete your account and any messages that you\'ve dropped.</string>
 
     <!-- Map Fragment -->
     <string name="map_fragment_toast_delete_error">Cannot delete another user\'s message.</string>
@@ -31,5 +33,9 @@
     <string name="write_message_btn_done">Drop</string>
     <string name="write_message_btn_cancel">Cancel</string>
     <string name="toast_error_message_empty">Cannot drop an empty message.</string>
+
+    <!-- General -->
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 </resources>
