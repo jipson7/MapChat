@@ -180,7 +180,9 @@ public class MapFragment extends Fragment implements
      */
     @Override
     public void onLocationChanged(Location l) {
-        mFirebaseDBHelper.updateUserLocation(mUser, l.getLatitude(), l.getLongitude());
+        if (mUser != null) {
+            mFirebaseDBHelper.updateUserLocation(mUser, l.getLatitude(), l.getLongitude());
+        }
     }
 
 
